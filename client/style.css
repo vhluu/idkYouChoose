@@ -1,0 +1,47 @@
+.slide {
+    width: 200px;
+}
+
+.carousel-control.left, .carousel-control.right {
+    background-image: none
+}
+
+body {
+    background: #34495E;
+    color: white;
+}
+.item {
+    width: 400px;
+    height: 400px;
+    margin: auto;
+    background: white;
+    color: #34495E;
+    font-family: "Lato", Arial, Helvetica, sans-serif;
+    font-size: 48px;
+    text-align: center;
+    line-height: 400px;
+    display: none;
+}
+
+.item.active {
+    display: block;
+}
+
+button {
+    border: none;
+    background-color: #34495E;
+    margin: auto;    
+}
+
+*:focus {
+    outline: none;
+}
+
+input {
+    color: #34495E;
+    margin-bottom: 15px;
+}
+
+select {
+    color: #34495E;
+}
