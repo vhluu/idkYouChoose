@@ -11,11 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var place_service_1 = require("../../services/place.service");
+var yelp_service_1 = require("../../services/yelp.service");
 var core_2 = require("@angular/core");
 var PlacesComponent = (function () {
-    function PlacesComponent(placeService) {
+    function PlacesComponent(placeService, yelpService) {
         var _this = this;
         this.placeService = placeService;
+        this.yelpService = yelpService;
         this.placeService.getPlaces()
             .subscribe(function (places) {
             var j, x, i;
@@ -34,9 +36,27 @@ var PlacesComponent = (function () {
                     _this.uniqueLocations.push(_this.places[i].location);
                 }
             }
+            console.log(_this.e1.nativeElement.querySelector('[selected="true"]'));
+            _this.selectedCity = _this.e1.nativeElement.querySelector('[selected="true"]').value;
+            console.log(_this.selectedCity);
             console.log(_this.uniqueLocations);
         });
+        // we want our place initially based on our current location
     }
+    // when adding a place, once we submit our form, then we call this method
+    // it will get the search results and then display them for the user to select
+    PlacesComponent.prototype.submitSearch = function () {
+        // get the first string
+        // get the second string
+        console.log(this.yelpService.findPlace());
+        // we are going to display the results to the user
+    };
+    // this is for when the user selects one of the results and adds it to their places
+    // we are going to add this place using our place service
+    PlacesComponent.prototype.submitAdd = function () {
+        var toAdd = {};
+        this.placeService.addPlace(toAdd);
+    };
     PlacesComponent.prototype.ngAfterViewInit = function () {
         console.log(this.e1.nativeElement);
     };
@@ -80,7 +100,7 @@ var PlacesComponent = (function () {
             selector: 'places',
             template: "<form (submit)=\"addPlace($event)\">\n    <input name=\"first\" type=\"text\" [(ngModel)]=\"name\" placeHolder=\"Name\"/>\n    <input name=\"second\" type=\"text\" [(ngModel)]=\"city\" placeHolder=\"City\"/>\n    <input name=\"submit\" type=\"submit\" value=\"Submit\"/>\n</form>\n<select #selectCity (onchange)=\"switchCity()\">\n    <option *ngFor=\"let loc of uniqueLocations; \" value=\"{{ loc }}\" selected=\"i==0\">{{ loc }}</option>\n</select>\n<div #myPlaces style=\"display:flex\">\n    <div *ngFor=\"let place of places; let i = index\" class=\"item\" [class.active]=\"i==0\">\n        {{ place.name }}\n    </div>\n    <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n</div>",
         }),
-        __metadata("design:paramtypes", [place_service_1.PlaceService])
+        __metadata("design:paramtypes", [place_service_1.PlaceService, yelp_service_1.YelpService])
     ], PlacesComponent);
     return PlacesComponent;
 }());

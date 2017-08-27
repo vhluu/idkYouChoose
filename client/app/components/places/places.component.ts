@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { PlaceService } from '../../services/place.service';
+import { YelpService } from '../../services/yelp.service';
 import { Place } from '../../../Place';
 import { ViewChild, ElementRef } from '@angular/core';
 declare var $: any;
@@ -34,8 +35,9 @@ export class PlacesComponent {
     showing: number;
     name: string;
     city: string;
+    selectedCity: string;
 
-    constructor(private placeService:PlaceService) {
+    constructor(private placeService:PlaceService, private yelpService:YelpService) {
         this.placeService.getPlaces()
             .subscribe(places => {
                 var j, x, i;
@@ -55,12 +57,40 @@ export class PlacesComponent {
                         this.uniqueLocations.push(this.places[i].location);
                     }
                 }
+                
+                console.log(this.e1.nativeElement.querySelector('[selected="true"]'));
+                this.selectedCity = this.e1.nativeElement.querySelector('[selected="true"]').value;
+                console.log(this.selectedCity);
                 console.log(this.uniqueLocations);
 
             });
         
+        // we want our place initially based on our current location
+            
 
         
+    }
+
+    // when adding a place, once we submit our form, then we call this method
+    // it will get the search results and then display them for the user to select
+    submitSearch() {
+        // get the first string
+
+        // get the second string
+
+        console.log(this.yelpService.findPlace());
+
+        // we are going to display the results to the user
+
+    }
+
+    // this is for when the user selects one of the results and adds it to their places
+    // we are going to add this place using our place service
+    submitAdd() {
+        var toAdd = {
+
+        };
+       this.placeService.addPlace(toAdd);
     }
 
     ngAfterViewInit() {
