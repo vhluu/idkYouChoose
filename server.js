@@ -10,7 +10,11 @@ var places = require('./routes/places'); // the API so that we can work with mon
 var port = 3001;
 
 var app = express(); // our main app variable
-
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
 // View Engine
 app.set('views', path.join(__dirname, 'views')); // folder we want to use for our views
 app.set('view engine', 'ejs');
@@ -22,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'client')));
 // Body Parser MW
 app.use(bodyParser.json()); // to parse json
 app.use(bodyParser.urlencoded({extended: false}));
+
 
 // creating route
 app.use('/', index); // homepage associated with index route

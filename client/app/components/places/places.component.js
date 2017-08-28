@@ -47,8 +47,15 @@ var PlacesComponent = (function () {
     // it will get the search results and then display them for the user to select
     PlacesComponent.prototype.submitSearch = function () {
         // get the first string
+        var _this = this;
         // get the second string
-        console.log(this.yelpService.findPlace());
+        console.log("first string is " + this.name);
+        console.log("second string is " + this.city);
+        this.yelpService.findPlace(this.name, this.city)
+            .subscribe(function (found) {
+            _this.found = found;
+            console.log("found " + _this.found);
+        });
         // we are going to display the results to the user
     };
     // this is for when the user selects one of the results and adds it to their places
@@ -98,7 +105,7 @@ var PlacesComponent = (function () {
         core_1.Component({
             moduleId: module.id,
             selector: 'places',
-            template: "<form (submit)=\"addPlace($event)\">\n    <input name=\"first\" type=\"text\" [(ngModel)]=\"name\" placeHolder=\"Name\"/>\n    <input name=\"second\" type=\"text\" [(ngModel)]=\"city\" placeHolder=\"City\"/>\n    <input name=\"submit\" type=\"submit\" value=\"Submit\"/>\n</form>\n<select #selectCity (onchange)=\"switchCity()\">\n    <option *ngFor=\"let loc of uniqueLocations; \" value=\"{{ loc }}\" selected=\"i==0\">{{ loc }}</option>\n</select>\n<div #myPlaces style=\"display:flex\">\n    <div *ngFor=\"let place of places; let i = index\" class=\"item\" [class.active]=\"i==0\">\n        {{ place.name }}\n    </div>\n    <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n</div>",
+            template: "<form (submit)=\"submitSearch()\">\n    <input name=\"first\" type=\"text\" [(ngModel)]=\"name\" placeHolder=\"Name\"/>\n    <input name=\"second\" type=\"text\" [(ngModel)]=\"city\" placeHolder=\"City\"/>\n    <input name=\"submit\" type=\"submit\" value=\"Submit\"/>\n</form>\n<select #selectCity (onchange)=\"switchCity()\">\n    <option *ngFor=\"let loc of uniqueLocations; \" value=\"{{ loc }}\" selected=\"i==0\">{{ loc }}</option>\n</select>\n<div #myPlaces style=\"display:flex\">\n    <div *ngFor=\"let place of places; let i = index\" class=\"item\" [class.active]=\"i==0\">\n        {{ place.name }}\n    </div>\n    <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n</div>",
         }),
         __metadata("design:paramtypes", [place_service_1.PlaceService, yelp_service_1.YelpService])
     ], PlacesComponent);

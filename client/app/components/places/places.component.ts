@@ -8,7 +8,7 @@ declare var $: any;
 @Component({
     moduleId: module.id,
     selector: 'places',
-    template: `<form (submit)="addPlace($event)">
+    template: `<form (submit)="submitSearch()">
     <input name="first" type="text" [(ngModel)]="name" placeHolder="Name"/>
     <input name="second" type="text" [(ngModel)]="city" placeHolder="City"/>
     <input name="submit" type="submit" value="Submit"/>
@@ -36,6 +36,7 @@ export class PlacesComponent {
     name: string;
     city: string;
     selectedCity: string;
+    found: any;
 
     constructor(private placeService:PlaceService, private yelpService:YelpService) {
         this.placeService.getPlaces()
@@ -66,19 +67,22 @@ export class PlacesComponent {
             });
         
         // we want our place initially based on our current location
-            
-
-        
+     
     }
 
     // when adding a place, once we submit our form, then we call this method
     // it will get the search results and then display them for the user to select
     submitSearch() {
         // get the first string
-
+        
         // get the second string
-
-        console.log(this.yelpService.findPlace());
+        console.log("first string is " + this.name);
+        console.log("second string is " + this.city);
+        this.yelpService.findPlace(this.name, this.city)
+            .subscribe(found => {
+                this.found = found;
+                console.log("found " + this.found);
+            });
 
         // we are going to display the results to the user
 

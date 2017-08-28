@@ -15,26 +15,31 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 require("rxjs/add/operator/map");
+var unirest_1 = require("unirest");
 var YelpService = (function () {
     function YelpService(http) {
         this.http = http;
-        var resBody = this.getAccessToken('XIq9YBzVAMalw9bDoEVb9w', 'Bc1OYAu9us0KSA83YakwyiZVp2zIGtO5zOZQwjxfUE835eUCHXJfe5Mgn6sGhooQ');
-        console.log(resBody);
-        this.token = resBody["access_token"];
+        //var resBody = this.getAccessToken('XIq9YBzVAMalw9bDoEVb9w', 'Bc1OYAu9us0KSA83YakwyiZVp2zIGtO5zOZQwjxfUE835eUCHXJfe5Mgn6sGhooQ');
+        //console.log("resBody is " + resBody);
+        //this.token = resBody["access_token"];
+        this.token = "Gv9Pz23rMFHYA7oLgSj9Xlq3hKa_CELPgFGkN1hX_UxrHygcgUMFqg2oRW3taLAca1XrMiplFLlGc2V1sQV_pFUEhPEbRBA6L5ChMpr0uulTPWwJFdvQnNfXFH-iWXYx";
+        console.log("the token is " + this.token);
         this.headers = new http_1.Headers();
         this.headers.append('Authorization', 'Bearer ' + this.token);
         if (navigator.geolocation) {
             navigator.geolocation.watchPosition(this.showPosition);
         }
+        else {
+            console.log("Could not get current position");
+        }
     }
     YelpService.prototype.showPosition = function (position) {
         this.lat = position.coords.latitude;
         this.long = position.coords.longitude;
-        console.log(this.lat);
-        console.log(this.long);
+        console.log("the latitude is " + this.lat);
+        console.log("the longitude is " + this.long);
     };
     YelpService.prototype.getAccessToken = function (clientId, clientSecret) {
-        var _this = this;
         // make post request to endpoint https://api.yelp.com/oauth2/token
         var urlSearchParams = new http_1.URLSearchParams();
         urlSearchParams.append('grant_type', 'client_credentials');
@@ -43,17 +48,24 @@ var YelpService = (function () {
         var body = urlSearchParams.toString();
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        this.http.post('https://api.yelp.com/oauth2/token', body, { headers: headers })
-            .map(function (res) { return res.json(); })
-            .subscribe(function (data) { return _this.data = data; });
-        console.log(this.data);
+        return this.http.post('https://api.yelp.com/oauth2/token', body, { headers: headers })
+            .subscribe(function (data) { return console.log(data); });
+        //.map((res) => res.json());
+        // .subscribe(data => this.data = data);
+        // console.log("the response body is " + this.data);
     };
     // we want to allow the user to enter the name and location or use current location
     // we then use this to make a get request to the yelp fusion api
     YelpService.prototype.findPlace = function (searchTerm, locationString) {
-        var params = "term=" + "&latitude=" + this.lat + "&longitude=" + this.long + "&open_now=true&limit=5";
-        return this.http.get('https://api.yelp.com/v3/businesses/search?' + params, { headers: this.headers })
-            .map(function (res) { return res.json(); });
+        var params = "term=" + searchTerm + "&latitude=" + this.lat + "&longitude=" + this.long + "&open_now=true&limit=5";
+        console.log("params is " + params);
+        console.log("headers is " + JSON.stringify(this.headers, null, 4));
+        //return this.http.get('https://api.yelp.com/v3/businesses/search?term=restaurant&location=boulder', { headers: this.headers})
+        //    .map(res => res.json());
+        var response = unirest_1.default.get("https://api.yelp.com/v3/businesses/search?term=restaurant&location=boulder")
+            .header("authorization", "Bearer " + this.token)
+            .asJson();
+        return response.toString();
     };
     YelpService = __decorate([
         core_1.Injectable(),
