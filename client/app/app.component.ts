@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { PlaceService } from './services/place.service';
-import { YelpService } from './services/yelp.service';
+import { YelpFusionService } from './services/yelpfusion.service';
 
 // marks class as Angular component
 @Component({
     moduleId: module.id,
     selector: 'my-app',
-    providers: [ PlaceService, YelpService ],
+    providers: [ PlaceService, YelpFusionService ],
     templateUrl: 'app.component.html'
 })
 

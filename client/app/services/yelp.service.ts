@@ -68,9 +68,8 @@ export class YelpService {
        
         /*var response = u.get("https://api.yelp.com/v3/businesses/search?term=restaurant&location=boulder")
             .header("authorization", "Bearer " + this.token)
-            .asJson();*.
-        return response.toString();
-
+            .asJson();*/
+        //return response.toString();
     }
 
 }

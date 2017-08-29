@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
 require("rxjs/add/operator/map");
-var unirest_1 = require("unirest");
+//import u from 'unirest';
 var YelpService = (function () {
     function YelpService(http) {
         this.http = http;
@@ -60,12 +60,12 @@ var YelpService = (function () {
         var params = "term=" + searchTerm + "&latitude=" + this.lat + "&longitude=" + this.long + "&open_now=true&limit=5";
         console.log("params is " + params);
         console.log("headers is " + JSON.stringify(this.headers, null, 4));
-        //return this.http.get('https://api.yelp.com/v3/businesses/search?term=restaurant&location=boulder', { headers: this.headers})
-        //    .map(res => res.json());
-        var response = unirest_1.default.get("https://api.yelp.com/v3/businesses/search?term=restaurant&location=boulder")
+        return this.http.get('https://api.yelp.com/v3/businesses/search?term=restaurant&location=boulder', { headers: this.headers })
+            .map(function (res) { return res.json(); });
+        /*var response = u.get("https://api.yelp.com/v3/businesses/search?term=restaurant&location=boulder")
             .header("authorization", "Bearer " + this.token)
-            .asJson();
-        return response.toString();
+            .asJson();*/
+        //return response.toString();
     };
     YelpService = __decorate([
         core_1.Injectable(),

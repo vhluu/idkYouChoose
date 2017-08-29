@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { PlaceService } from '../../services/place.service';
-import { YelpService } from '../../services/yelp.service';
+import { YelpFusionService } from '../../services/yelpfusion.service';
 import { Place } from '../../../Place';
 import { ViewChild, ElementRef } from '@angular/core';
 declare var $: any;
@@ -14,7 +14,7 @@ declare var $: any;
     <input name="submit" type="submit" value="Submit"/>
 </form>
 <select #selectCity (onchange)="switchCity()">
-    <option *ngFor="let loc of uniqueLocations; " value="{{ loc }}" selected="i==0">{{ loc }}</option>
+    <option *ngFor="let loc of uniqueLocations" value="{{ loc }}">{{ loc }}</option>
 </select>
 <div #myPlaces style="display:flex">
     <div *ngFor="let place of places; let i = index" class="item" [class.active]="i==0">
@@ -28,6 +28,7 @@ declare var $: any;
 
 export class PlacesComponent {
     @ViewChild('myPlaces') e1:ElementRef;
+    @ViewChild('selectCity') e2:ElementRef;
 
     uniqueLocations: string[];
     places: Place[];
@@ -38,7 +39,7 @@ export class PlacesComponent {
     selectedCity: string;
     found: any;
 
-    constructor(private placeService:PlaceService, private yelpService:YelpService) {
+    constructor(private placeService:PlaceService, private yelpFusionService:YelpFusionService) {
         this.placeService.getPlaces()
             .subscribe(places => {
                 var j, x, i;
@@ -58,12 +59,9 @@ export class PlacesComponent {
                         this.uniqueLocations.push(this.places[i].location);
                     }
                 }
-                
-                console.log(this.e1.nativeElement.querySelector('[selected="true"]'));
-                this.selectedCity = this.e1.nativeElement.querySelector('[selected="true"]').value;
-                console.log(this.selectedCity);
-                console.log(this.uniqueLocations);
+                console.log("uniqueLocations is " + this.uniqueLocations);
 
+                //this.selectedCity = this.e2.nativeElement.querySelector('[selected="selected"]').value;
             });
         
         // we want our place initially based on our current location
@@ -78,10 +76,10 @@ export class PlacesComponent {
         // get the second string
         console.log("first string is " + this.name);
         console.log("second string is " + this.city);
-        this.yelpService.findPlace(this.name, this.city)
+        this.yelpFusionService.getResults(this.name, this.city)
             .subscribe(found => {
                 this.found = found;
-                console.log("found " + this.found);
+                console.log("found " + JSON.stringify(this.found));
             });
 
         // we are going to display the results to the user

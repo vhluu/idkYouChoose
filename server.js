@@ -6,6 +6,7 @@ var bodyParser = require('body-parser'); // bring in the body parser
 
 var index = require('./routes/index'); // our homepage
 var places = require('./routes/places'); // the API so that we can work with mongodb
+var yelpfusion = require('./routes/yelpfusion'); // API for YelpFusion
 
 var port = 3001;
 
@@ -31,6 +32,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 // creating route
 app.use('/', index); // homepage associated with index route
 app.use('/api', places); // to interact with api
+app.use('/yfapi', yelpfusion);
 
 // conncting to port
 app.listen(port, function() {

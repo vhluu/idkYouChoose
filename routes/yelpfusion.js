@@ -2,9 +2,10 @@ var express = require('express');
 var router = express.Router();
 var request = require('request');
 
-router.get('/search/:term/:loc', function(req, res, next) {
+router.get('/:term/:loc', function(req, res, next) {
     var url = 'https://api.yelp.com/v3/businesses/search';
     url = url + '?term=' + req.params.term + '&location=' + req.params.loc;
+    console.log("the url is " + url);
     var options = {
         url: url,
         headers: {
@@ -23,9 +24,10 @@ router.get('/search/:term/:loc', function(req, res, next) {
     })
 });
 
-router.get('/search/:term/:lat/:long', function(req, res, next) {
+router.get('/:term/:lat/:long', function(req, res, next) {
     var url = 'https://api.yelp.com/v3/businesses/search';
     url = url + '?term=' + req.params.term + '&latitude=' + req.params.lat + '&longitiude=' + req.params.long;
+    console.log("the url is " + url);
     var options = {
         url: url,
         headers: {

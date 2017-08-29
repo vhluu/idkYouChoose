@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var place_service_1 = require("./services/place.service");
-var yelp_service_1 = require("./services/yelp.service");
+var yelpfusion_service_1 = require("./services/yelpfusion.service");
 // marks class as Angular component
 var AppComponent = (function () {
     function AppComponent() {
@@ -17,7 +17,7 @@ var AppComponent = (function () {
         core_1.Component({
             moduleId: module.id,
             selector: 'my-app',
-            providers: [place_service_1.PlaceService, yelp_service_1.YelpService],
+            providers: [place_service_1.PlaceService, yelpfusion_service_1.YelpFusionService],
             templateUrl: 'app.component.html'
         })
     ], AppComponent);
