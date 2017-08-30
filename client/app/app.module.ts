@@ -4,10 +4,11 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { PlacesComponent } from './components/places/places.component';
+import { AddCardComponent } from './components/add-card/add-card.component';
 
 @NgModule({
     imports: [ BrowserModule, HttpModule, FormsModule ],
-    declarations: [ AppComponent, PlacesComponent ],
+    declarations: [ AppComponent, PlacesComponent, AddCardComponent ],
     bootstrap: [ AppComponent ]
 })
 

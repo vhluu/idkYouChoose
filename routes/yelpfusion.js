@@ -4,7 +4,7 @@ var request = require('request');
 
 router.get('/:term/:loc', function(req, res, next) {
     var url = 'https://api.yelp.com/v3/businesses/search';
-    url = url + '?term=' + req.params.term + '&location=' + req.params.loc;
+    url = url + '?term=' + req.params.term + '&location=' + req.params.loc + '&limit=3';
     console.log("the url is " + url);
     var options = {
         url: url,

@@ -12,13 +12,14 @@ var http_1 = require("@angular/http");
 var forms_1 = require("@angular/forms");
 var app_component_1 = require("./app.component");
 var places_component_1 = require("./components/places/places.component");
+var add_card_component_1 = require("./components/add-card/add-card.component");
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
             imports: [platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule],
-            declarations: [app_component_1.AppComponent, places_component_1.PlacesComponent],
+            declarations: [app_component_1.AppComponent, places_component_1.PlacesComponent, add_card_component_1.AddCardComponent],
             bootstrap: [app_component_1.AppComponent]
         })
     ], AppModule);

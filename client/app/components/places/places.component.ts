@@ -5,6 +5,7 @@ import { Place } from '../../../Place';
 import { ViewChild, ElementRef } from '@angular/core';
 declare var $: any;
 
+
 @Component({
     moduleId: module.id,
     selector: 'places',
@@ -13,6 +14,10 @@ declare var $: any;
     <input name="second" type="text" [(ngModel)]="city" placeHolder="City"/>
     <input name="submit" type="submit" value="Submit"/>
 </form>
+<div #adding>
+    <button (click)="openCard()">+</button>
+    <add-card #myCards></add-card>
+</div>
 <select #selectCity (onchange)="switchCity()">
     <option *ngFor="let loc of uniqueLocations" value="{{ loc }}">{{ loc }}</option>
 </select>
@@ -22,6 +27,7 @@ declare var $: any;
     </div>
     <button #next (click)="changeItem()"><i class="material-icons">refresh</i></button>
 </div>`,
+
 })
 
 
@@ -29,6 +35,7 @@ declare var $: any;
 export class PlacesComponent {
     @ViewChild('myPlaces') e1:ElementRef;
     @ViewChild('selectCity') e2:ElementRef;
+    @ViewChild('adding') e3:ElementRef;
 
     uniqueLocations: string[];
     places: Place[];
@@ -68,6 +75,10 @@ export class PlacesComponent {
      
     }
 
+    openCard() {
+       console.log("e3 is " + JSON.stringify(this.e3.nativeElement.querySelector('div')));
+       this.e3.nativeElement.querySelector('div').style.display = "block";
+    }
     // when adding a place, once we submit our form, then we call this method
     // it will get the search results and then display them for the user to select
     submitSearch() {
