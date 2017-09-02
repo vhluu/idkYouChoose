@@ -45,30 +45,6 @@ var PlacesComponent = (function () {
         console.log("e3 is " + JSON.stringify(this.e3.nativeElement.querySelector('div')));
         this.e3.nativeElement.querySelector('div').style.display = "block";
     };
-    // when adding a place, once we submit our form, then we call this method
-    // it will get the search results and then display them for the user to select
-    PlacesComponent.prototype.submitSearch = function () {
-        // get the first string
-        var _this = this;
-        // get the second string
-        console.log("first string is " + this.name);
-        console.log("second string is " + this.city);
-        this.yelpFusionService.getResults(this.name, this.city)
-            .subscribe(function (found) {
-            _this.found = found;
-            console.log("found " + JSON.stringify(_this.found));
-        });
-        // we are going to display the results to the user
-    };
-    // this is for when the user selects one of the results and adds it to their places
-    // we are going to add this place using our place service
-    PlacesComponent.prototype.submitAdd = function () {
-        var toAdd = {};
-        this.placeService.addPlace(toAdd);
-    };
-    PlacesComponent.prototype.ngAfterViewInit = function () {
-        console.log(this.e1.nativeElement);
-    };
     PlacesComponent.prototype.changeItem = function () {
         if (!((this.showing + 1) >= this.places.length)) {
             this.e1.nativeElement.querySelectorAll('div')[this.showing].className = "item";
@@ -78,26 +54,6 @@ var PlacesComponent = (function () {
     };
     PlacesComponent.prototype.switchCity = function () {
         console.log("switching");
-    };
-    PlacesComponent.prototype.addPlace = function (event) {
-        var _this = this;
-        event.preventDefault();
-        console.log(this.city);
-        console.log(this.name);
-        var newPlace = {
-            name: this.name,
-            location: this.city
-        };
-        this.placeService.addPlace(newPlace)
-            .subscribe(function (place) {
-            _this.places.push(place);
-            _this.name = '';
-            _this.city = '';
-        });
-        if (this.uniqueLocations.indexOf(this.city) == -1) {
-            this.uniqueLocations.push(this.city);
-        }
-        console.log(this.uniqueLocations);
     };
     __decorate([
         core_2.ViewChild('myPlaces'),
@@ -115,7 +71,7 @@ var PlacesComponent = (function () {
         core_1.Component({
             moduleId: module.id,
             selector: 'places',
-            template: "<form (submit)=\"submitSearch()\">\n    <input name=\"first\" type=\"text\" [(ngModel)]=\"name\" placeHolder=\"Name\"/>\n    <input name=\"second\" type=\"text\" [(ngModel)]=\"city\" placeHolder=\"City\"/>\n    <input name=\"submit\" type=\"submit\" value=\"Submit\"/>\n</form>\n<div #adding>\n    <button (click)=\"openCard()\">+</button>\n    <add-card #myCards></add-card>\n</div>\n<select #selectCity (onchange)=\"switchCity()\">\n    <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n</select>\n<div #myPlaces style=\"display:flex\">\n    <div *ngFor=\"let place of places; let i = index\" class=\"item\" [class.active]=\"i==0\">\n        {{ place.name }}\n    </div>\n    <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n</div>",
+            template: "<div #adding>\n    <button (click)=\"openCard()\">+</button>\n    <add-card #myCards></add-card>\n</div>\n<select #selectCity (onchange)=\"switchCity()\">\n    <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n</select>\n<div #myPlaces style=\"display:flex\">\n    <div *ngFor=\"let place of places; let i = index\" class=\"item\" [class.active]=\"i==0\">\n        {{ place.name }}\n    </div>\n    <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n</div>",
         }),
         __metadata("design:paramtypes", [place_service_1.PlaceService, yelpfusion_service_1.YelpFusionService])
     ], PlacesComponent);

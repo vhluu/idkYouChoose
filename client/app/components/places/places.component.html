@@ -1,7 +1,0 @@
-<div #myPlaces>
-    <div *ngFor="let place of places; let i = index" class="item" [class.active]="i==0">
-        {{ place.name }}
-    </div>
-    <button #next (click)="changeItem()">&#9654;</button>
-</div>
-

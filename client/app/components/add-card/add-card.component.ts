@@ -8,13 +8,13 @@ declare var $: any;
 @Component({
     moduleId: module.id,
     selector: 'add-card',
-    template: `<div class="card">
+    template: `<div #cardWrap class="card">
         <div #cards class="card-content">
-            <button class="close">&times;</button>
+            <button (click)="cancel()"class="close">&times;</button>
             <form (submit)="submitSearch()">
-                <input name="first" type="text" [(ngModel)]="name" placeHolder="Name"/>
-                <input name="second" type="text" [(ngModel)]="city" placeHolder="Location"/>
-                <input name="submit" type="submit" value="Submit"/>
+                <input name="first" type="text" [(ngModel)]="name" placeHolder="Name"/><br>
+                <input name="second" type="text" [(ngModel)]="city" placeHolder="Location"/><br>
+                <input name="submit" type="submit" value="Search"/>
             </form>
             <div class="results">
                 <div class="results-content" *ngFor="let result of found; let i = index" (click)="selectResult(i)">
@@ -23,8 +23,16 @@ declare var $: any;
                     <a href="{{ result.url }}">{{ result.url }}</a>
                     
                 </div>
+                
             </div>
-            <button (click)="submitAdd()">Add Place</button>
+            <form #tagForm (submit)="addTag()" style="display:none">
+                <input #tagInput name="tagInput" type="text" [(ngModel)]="tagName" placeHolder="tag (i.e. mexican, japanese)" style="width:200px"/>
+                <input name="tagSubmit" type="submit" value="Add Tag"/>
+            </form>
+            <span *ngFor="let tag of tags">#{{ tag }}&nbsp;&nbsp;</span>
+            <br>
+            <button #add (click)="submitAdd()" style="display:none">Add Place</button>
+            
         </div>
     </div>`,
     styles: [`
@@ -63,7 +71,10 @@ declare var $: any;
             cursor: pointer;
             cursor: hand;
         }
-    
+
+        span {
+            color: black;
+        }
     `]
 })
 
@@ -71,6 +82,10 @@ declare var $: any;
 
 export class AddCardComponent {
     @ViewChild('cards') e1:ElementRef;
+    @ViewChild('cardWrap') e2:ElementRef;
+    @ViewChild('add') e3:ElementRef;
+    @ViewChild('tagForm') e4:ElementRef;
+    @ViewChild('tagInput') e5:ElementRef;
 
     places: Place[];
     location: string;
@@ -80,6 +95,8 @@ export class AddCardComponent {
     found: any;
     uniqueLocations: string [] = [];
     selectedResult: number;
+    tags: string [] = [];
+    tagName: string;
 
     constructor(private placeService:PlaceService, private yelpFusionService:YelpFusionService) {
        
@@ -107,6 +124,8 @@ export class AddCardComponent {
         this.e1.nativeElement.querySelectorAll('.results-content')[index].style.background = '#B2EBF2';
         this.selectedResult = index;
         console.log("the selected result is " + this.selectedResult);
+        this.e3.nativeElement.style.display = "block";
+        this.e4.nativeElement.style.display = "block";
     }
 
     // this is for when the user selects one of the results and adds it to their places
@@ -114,14 +133,24 @@ export class AddCardComponent {
     submitAdd() {
         var toAdd = {
             name: this.found[this.selectedResult].name,
-            location: this.found[this.selectedResult].location.city
+            location: this.found[this.selectedResult].location.city,
+            tags: this.tags
         };
        this.placeService.addPlace(toAdd)
         .subscribe(place => {
            
         });
+        this.e2.nativeElement.style.display = "";
     }
 
+    cancel() {
+        this.e2.nativeElement.style.display = "";
+    }
+
+    addTag() {
+        this.tags.push(this.tagName);
+        this.e5.nativeElement.value = "";
+    }
 
 
     addPlace(event) {
