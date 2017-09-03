@@ -67,11 +67,16 @@ var PlacesComponent = (function () {
         core_2.ViewChild('adding'),
         __metadata("design:type", core_2.ElementRef)
     ], PlacesComponent.prototype, "e3", void 0);
+    __decorate([
+        core_2.ViewChild('fMenu'),
+        __metadata("design:type", core_2.ElementRef)
+    ], PlacesComponent.prototype, "fMenu", void 0);
     PlacesComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'places',
-            template: "<div #adding>\n    <button (click)=\"openCard()\">+</button>\n    <add-card #myCards></add-card>\n</div>\n<select #selectCity (onchange)=\"switchCity()\">\n    <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n</select>\n<div #myPlaces style=\"display:flex\">\n    <div *ngFor=\"let place of places; let i = index\" class=\"item\" [class.active]=\"i==0\">\n        {{ place.name }}\n    </div>\n    <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n</div>",
+            template: "\n    <div #adding>\n        <button (click)=\"openCard()\">+</button>\n        <add-card #myCards></add-card>\n    </div>\n    <div>\n        <select #selectCity (onchange)=\"switchCity()\">\n            <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n        </select>\n        <filter-menu #fMenu></filter-menu>\n        <button class=\"generate\" (click)=\"generate()\">idk you choose!</button>\n    </div>\n    <div #myPlaces style=\"display:flex; margin-left: 50px\">\n        <div *ngFor=\"let place of places; let i = index\" class=\"item\" [class.active]=\"i==0\">\n            {{ place.name }}\n        </div>\n        <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n    </div>",
+            styles: ["\n        .generate {\n            margin-top: 20px;\n            background: white;\n            color: black;\n            border: none;\n            outline: none;\n        }\n    "]
         }),
         __metadata("design:paramtypes", [place_service_1.PlaceService, yelpfusion_service_1.YelpFusionService])
     ], PlacesComponent);

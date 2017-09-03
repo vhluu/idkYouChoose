@@ -4,7 +4,7 @@ declare var $: any;
 
 @Component({
     moduleId: module.id,
-    selector: 'navi-bar',
+    selector: 'navi-menu',
     template: `<div>
       <h4>Navigation</h4>
       <ul>
@@ -47,7 +47,7 @@ declare var $: any;
 
 
 
-export class NaviBarComponent {
+export class NaviMenuComponent {
 
 
     constructor() {

@@ -5,10 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { PlacesComponent } from './components/places/places.component';
 import { AddCardComponent } from './components/add-card/add-card.component';
-import { NaviBarComponent } from './components/navi-bar/navi-bar.component';
+import { NaviMenuComponent } from './components/navi-menu/navi-menu.component';
+import { FilterMenuComponent } from './components/filter-menu/filter-menu.component';
 @NgModule({
     imports: [ BrowserModule, HttpModule, FormsModule ],
-    declarations: [ AppComponent, PlacesComponent, AddCardComponent, NaviBarComponent],
+    declarations: [ AppComponent, PlacesComponent, AddCardComponent, NaviMenuComponent,
+        FilterMenuComponent],
     bootstrap: [ AppComponent ]
 })
 

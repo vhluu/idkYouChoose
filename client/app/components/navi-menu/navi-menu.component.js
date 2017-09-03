@@ -10,19 +10,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-var NaviBarComponent = (function () {
-    function NaviBarComponent() {
+var NaviMenuComponent = (function () {
+    function NaviMenuComponent() {
     }
-    NaviBarComponent = __decorate([
+    NaviMenuComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
-            selector: 'navi-bar',
+            selector: 'navi-menu',
             template: "<div>\n      <h4>Navigation</h4>\n      <ul>\n        <li>Choose Place\n        <li>My Places\n      </ul>\n    </div>",
             styles: ["\n        ul {\n          list-style-type: none;\n          padding-left: 30px;\n        }\n\n        li:first-child {\n          \n        }\n\n        li {\n          margin-bottom:10px;\n        }\n\n        li:hover {\n          cursor: pointer;\n        }\n\n        div {\n          background: white;\n          color: black;\n          width: 200px;\n          height: 400px;\n        }\n \n        h4 {\n          text-align: center;\n          padding-top: 20px;\n          padding-bottom: 5px;\n        }\n    "]
         }),
         __metadata("design:paramtypes", [])
-    ], NaviBarComponent);
-    return NaviBarComponent;
+    ], NaviMenuComponent);
+    return NaviMenuComponent;
 }());
-exports.NaviBarComponent = NaviBarComponent;
-//# sourceMappingURL=navi-bar.component.js.map
+exports.NaviMenuComponent = NaviMenuComponent;
+//# sourceMappingURL=navi-menu.component.js.map

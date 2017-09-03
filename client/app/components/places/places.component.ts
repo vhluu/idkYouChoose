@@ -9,19 +9,33 @@ declare var $: any;
 @Component({
     moduleId: module.id,
     selector: 'places',
-    template: `<div #adding>
-    <button (click)="openCard()">+</button>
-    <add-card #myCards></add-card>
-</div>
-<select #selectCity (onchange)="switchCity()">
-    <option *ngFor="let loc of uniqueLocations" value="{{ loc }}">{{ loc }}</option>
-</select>
-<div #myPlaces style="display:flex">
-    <div *ngFor="let place of places; let i = index" class="item" [class.active]="i==0">
-        {{ place.name }}
+    template: `
+    <div #adding>
+        <button (click)="openCard()">+</button>
+        <add-card #myCards></add-card>
     </div>
-    <button #next (click)="changeItem()"><i class="material-icons">refresh</i></button>
-</div>`,
+    <div>
+        <select #selectCity (onchange)="switchCity()">
+            <option *ngFor="let loc of uniqueLocations" value="{{ loc }}">{{ loc }}</option>
+        </select>
+        <filter-menu #fMenu></filter-menu>
+        <button class="generate" (click)="generate()">idk you choose!</button>
+    </div>
+    <div #myPlaces style="display:flex; margin-left: 50px">
+        <div *ngFor="let place of places; let i = index" class="item" [class.active]="i==0">
+            {{ place.name }}
+        </div>
+        <button #next (click)="changeItem()"><i class="material-icons">refresh</i></button>
+    </div>`,
+    styles: [`
+        .generate {
+            margin-top: 20px;
+            background: white;
+            color: black;
+            border: none;
+            outline: none;
+        }
+    `]
 
 })
 
@@ -31,6 +45,7 @@ export class PlacesComponent {
     @ViewChild('myPlaces') e1:ElementRef;
     @ViewChild('selectCity') e2:ElementRef;
     @ViewChild('adding') e3:ElementRef;
+    @ViewChild('fMenu') fMenu:ElementRef;
 
     uniqueLocations: string[];
     places: Place[];
