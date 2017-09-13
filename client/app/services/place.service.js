@@ -22,6 +22,10 @@ var PlaceService = (function () {
         return this.http.get('/api/places') // make get request to our api
             .map(function (res) { return res.json(); });
     };
+    PlaceService.prototype.getTaggedPlaces = function (tagName) {
+        return this.http.get('/api/places/' + tagName)
+            .map(function (res) { return res.json(); });
+    };
     PlaceService.prototype.addPlace = function (newPlace) {
         console.log("new place is " + newPlace);
         var headers = new http_1.Headers();

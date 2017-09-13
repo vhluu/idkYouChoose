@@ -86,6 +86,7 @@ export class FilterMenuComponent {
     }
 
     getShowTags() {
+        console.log("going to return show tags");
         return this.toShow;
     }
 

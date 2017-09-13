@@ -20,13 +20,14 @@ var PlacesComponent = (function () {
         this.yelpFusionService = yelpFusionService;
         this.placeService.getPlaces()
             .subscribe(function (places) {
-            var j, x, i;
+            /*var j, x, i;
             for (i = places.length; i; i--) {
                 j = Math.floor(Math.random() * i);
                 x = places[i - 1];
                 places[i - 1] = places[j];
                 places[j] = x;
-            }
+            }*/
+            var i;
             console.log(places);
             _this.places = places;
             _this.uniqueLocations = [];
@@ -55,6 +56,22 @@ var PlacesComponent = (function () {
     PlacesComponent.prototype.switchCity = function () {
         console.log("switching");
     };
+    PlacesComponent.prototype.generate = function () {
+        console.log(JSON.stringify(this.e4));
+        var show = this.e4.nativeElement.querySelector('filter-menu').getShowTags();
+        // var remove = this.fMenu.nativeElement.getRemoveTags();
+        // var temp = [];
+        // maybe randomly choose one of the tags and then one place in tags
+        // var tagIndex = Math.random() * show.length;
+        // var chosenTag = show[tagIndex];
+        this.placeService.getTaggedPlaces('mexican,japanese')
+            .subscribe(function (places) {
+            console.log(places);
+            for (var j = 0; j < places.length; j++) {
+                //temp.push(places[j]);
+            }
+        });
+    };
     __decorate([
         core_2.ViewChild('myPlaces'),
         __metadata("design:type", core_2.ElementRef)
@@ -68,14 +85,14 @@ var PlacesComponent = (function () {
         __metadata("design:type", core_2.ElementRef)
     ], PlacesComponent.prototype, "e3", void 0);
     __decorate([
-        core_2.ViewChild('fMenu'),
+        core_2.ViewChild('generateDiv'),
         __metadata("design:type", core_2.ElementRef)
-    ], PlacesComponent.prototype, "fMenu", void 0);
+    ], PlacesComponent.prototype, "e4", void 0);
     PlacesComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'places',
-            template: "\n    <div #adding>\n        <button (click)=\"openCard()\">+</button>\n        <add-card #myCards></add-card>\n    </div>\n    <div>\n        <select #selectCity (onchange)=\"switchCity()\">\n            <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n        </select>\n        <filter-menu #fMenu></filter-menu>\n        <button class=\"generate\" (click)=\"generate()\">idk you choose!</button>\n    </div>\n    <div #myPlaces style=\"display:flex; margin-left: 50px\">\n        <div *ngFor=\"let place of places; let i = index\" class=\"item\" [class.active]=\"i==0\">\n            {{ place.name }}\n        </div>\n        <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n    </div>",
+            template: "\n    <div #adding>\n        <button (click)=\"openCard()\">+</button>\n        <add-card #myCards></add-card>\n    </div>\n    <div #generateDiv>\n        <select #selectCity (onchange)=\"switchCity()\">\n            <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n        </select>\n        <filter-menu></filter-menu>\n        <button class=\"generate\" (click)=\"generate()\">idk you choose!</button>\n    </div>\n    <div #myPlaces style=\"display:flex; margin-left: 50px\">\n        <div *ngFor=\"let place of filteredPlaces; let i = index\" class=\"item\" [class.active]=\"i==0\">\n            {{ place.name }}\n        </div>\n        <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n    </div>",
             styles: ["\n        .generate {\n            margin-top: 20px;\n            background: white;\n            color: black;\n            border: none;\n            outline: none;\n        }\n    "]
         }),
         __metadata("design:paramtypes", [place_service_1.PlaceService, yelpfusion_service_1.YelpFusionService])

@@ -16,6 +16,11 @@ export class PlaceService {
             .map(res => res.json());
     }
 
+    getTaggedPlaces(tagName) {
+        return this.http.get('/api/places/' + tagName)
+            .map(res => res.json());
+    }
+
     addPlace(newPlace) {
         console.log("new place is " + newPlace);
         var headers = new Headers();

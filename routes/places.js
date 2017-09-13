@@ -13,6 +13,23 @@ router.get('/places', function(req, res, next) {
     });
 });
 
+/*router.get('/places/:tagName', function(req, res, next) {
+    db.places.find({ "tags": req.params.tagName}, function(err, places) {
+        if (err) res.send(err);
+        res.json(places);
+    });
+});*/
+
+router.get('/places/:tagName', function(req, res, next) {
+    var tags = req.params.tagName.split(',');
+    db.places.find(
+        { "tags" : { $in: tags, $nin: ["italian"]} }, function(err, places) {
+        if (err) res.send(err);
+        res.json(places);
+    });
+});
+
+
 // gets single place
 router.get('/place/:id', function(req, res, next) {
     db.places.findOne({_id: mongojs.ObjectId(req.params.id)}, function(err, place) {

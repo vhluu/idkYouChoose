@@ -33,6 +33,7 @@ var FilterMenuComponent = (function () {
         console.log("toRemove is " + this.toRemove);
     };
     FilterMenuComponent.prototype.getShowTags = function () {
+        console.log("going to return show tags");
         return this.toShow;
     };
     FilterMenuComponent.prototype.getRemoveTags = function () {
