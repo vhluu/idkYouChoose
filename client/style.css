@@ -21,12 +21,11 @@ html {
     font-size: 48px;
     text-align: center;
     line-height: 400px;
-    display: none;
+    display: block;
+    word-wrap: break-word;
 }
 
-.item.active {
-    display: block;
-}
+
 
 my-app {
     width: 100%;

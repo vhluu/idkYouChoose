@@ -13,6 +13,15 @@ router.get('/places', function(req, res, next) {
     });
 });
 
+router.get('/distinct/:loc', function(req, res, next) {
+    db.places.distinct("tags", {"location" : req.params.loc} , function(err, distinct) {
+        if (err) res.send(err);
+        res.json(distinct);
+    });
+});
+
+
+
 /*router.get('/places/:tagName', function(req, res, next) {
     db.places.find({ "tags": req.params.tagName}, function(err, places) {
         if (err) res.send(err);
@@ -21,12 +30,27 @@ router.get('/places', function(req, res, next) {
 });*/
 
 router.get('/places/:tagName', function(req, res, next) {
-    var tags = req.params.tagName.split(',');
-    db.places.find(
-        { "tags" : { $in: tags, $nin: ["italian"]} }, function(err, places) {
-        if (err) res.send(err);
-        res.json(places);
-    });
+    var show = req.params.tagName.split('-')[0];
+    var remove;
+    if (show != "") {
+        remove = (req.params.tagName.split('-')[1]).split(',');
+        show = show.split(',');
+        db.places.find(
+            { "tags" : { $in: show, $nin: remove } }, function(err, places) {
+            if (err) res.send(err);
+            res.json(places);
+        });
+    }
+
+    else {
+        remove = (req.params.tagName.split('-')[1]).split(',');
+        db.places.find(
+            { "tags" : { $nin: remove } }, function(err, places) {
+            if (err) res.send(err);
+            res.json(places);
+        });
+    }
+
 });
 
 

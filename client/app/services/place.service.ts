@@ -21,6 +21,11 @@ export class PlaceService {
             .map(res => res.json());
     }
 
+    getDistinctTags(loc) {
+        return this.http.get('/api/distinct/' + loc)
+            .map(res => res.json());
+    }
+
     addPlace(newPlace) {
         console.log("new place is " + newPlace);
         var headers = new Headers();

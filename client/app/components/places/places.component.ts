@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { PlaceService } from '../../services/place.service';
 import { YelpFusionService } from '../../services/yelpfusion.service';
 import { Place } from '../../../Place';
 import { ViewChild, ElementRef } from '@angular/core';
+import { FilterMenuComponent } from '../filter-menu/filter-menu.component';
 declare var $: any;
 
 
@@ -18,12 +19,12 @@ declare var $: any;
         <select #selectCity (onchange)="switchCity()">
             <option *ngFor="let loc of uniqueLocations" value="{{ loc }}">{{ loc }}</option>
         </select>
-        <filter-menu></filter-menu>
+        <filter-menu #fm></filter-menu>
         <button class="generate" (click)="generate()">idk you choose!</button>
     </div>
     <div #myPlaces style="display:flex; margin-left: 50px">
-        <div *ngFor="let place of filteredPlaces; let i = index" class="item" [class.active]="i==0">
-            {{ place.name }}
+        <div class="item">
+            {{ filteredPlace }}
         </div>
         <button #next (click)="changeItem()"><i class="material-icons">refresh</i></button>
     </div>`,
@@ -46,16 +47,22 @@ export class PlacesComponent {
     @ViewChild('selectCity') e2:ElementRef;
     @ViewChild('adding') e3:ElementRef;
     @ViewChild('generateDiv') e4:ElementRef;
+    @ViewChild(FilterMenuComponent) private e5: FilterMenuComponent;
 
     uniqueLocations: string[];
     places: Place[];
-    filteredPlaces: string[];
+    filteredPlace: string;
     location: string;
     showing: number;
     name: string;
     city: string;
     selectedCity: string;
     found: any;
+    
+    show: string;
+    remove: string;
+    fP: any;
+    prev: number;
 
     constructor(private placeService:PlaceService, private yelpFusionService:YelpFusionService) {
         this.placeService.getPlaces()
@@ -94,11 +101,15 @@ export class PlacesComponent {
     }
 
     changeItem() {
-        if(!((this.showing + 1) >= this.places.length)) {
-            this.e1.nativeElement.querySelectorAll('div')[this.showing].className = "item";
-            this.showing++;
-            this.e1.nativeElement.querySelectorAll('div')[this.showing].className = "item active";
-        }  
+        var rand;
+        do {
+            rand = Math.floor(Math.random() * this.fP.length);
+        } while (rand == this.prev);
+        this.prev = rand;
+        
+        console.log(this.prev);
+        this.filteredPlace = this.fP[this.prev].name;
+        
     }
 
     switchCity() {
@@ -106,23 +117,27 @@ export class PlacesComponent {
     }
 
     generate() {
-        console.log(JSON.stringify(this.e4));
-        var show = this.e4.nativeElement.querySelector('filter-menu').getShowTags();
-       // var remove = this.fMenu.nativeElement.getRemoveTags();
-       // var temp = [];
-        // maybe randomly choose one of the tags and then one place in tags
-       // var tagIndex = Math.random() * show.length;
-       // var chosenTag = show[tagIndex];
-
-
-        this.placeService.getTaggedPlaces('mexican,japanese')
+        this.show = this.e5.getShowTags();
+        this.remove = this.e5.getRemoveTags();
+       
+        this.placeService.getTaggedPlaces(this.show + '-' + this.remove)
         .subscribe(places => {
-            console.log(places);
-            for (var j = 0; j < places.length; j++) {
-                //temp.push(places[j]);
-            }
+            this.fP = places;
+            console.log(this.fP);
+            console.log(this.fP.length);
+            this.prev = Math.floor(Math.random() * this.fP.length);
+            
+            console.log(this.prev);
+            this.filteredPlace = this.fP[this.prev].name;
+            
         });
 
+
+    }
+
+    ngAfterViewInit() {
+        console.log("after init");
+        console.log(this.e4.nativeElement);
     }
 
 

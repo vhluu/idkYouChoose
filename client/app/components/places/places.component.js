@@ -13,6 +13,7 @@ var core_1 = require("@angular/core");
 var place_service_1 = require("../../services/place.service");
 var yelpfusion_service_1 = require("../../services/yelpfusion.service");
 var core_2 = require("@angular/core");
+var filter_menu_component_1 = require("../filter-menu/filter-menu.component");
 var PlacesComponent = (function () {
     function PlacesComponent(placeService, yelpFusionService) {
         var _this = this;
@@ -47,30 +48,34 @@ var PlacesComponent = (function () {
         this.e3.nativeElement.querySelector('div').style.display = "block";
     };
     PlacesComponent.prototype.changeItem = function () {
-        if (!((this.showing + 1) >= this.places.length)) {
-            this.e1.nativeElement.querySelectorAll('div')[this.showing].className = "item";
-            this.showing++;
-            this.e1.nativeElement.querySelectorAll('div')[this.showing].className = "item active";
-        }
+        var rand;
+        do {
+            rand = Math.floor(Math.random() * this.fP.length);
+        } while (rand == this.prev);
+        this.prev = rand;
+        console.log(this.prev);
+        this.filteredPlace = this.fP[this.prev].name;
     };
     PlacesComponent.prototype.switchCity = function () {
         console.log("switching");
     };
     PlacesComponent.prototype.generate = function () {
-        console.log(JSON.stringify(this.e4));
-        var show = this.e4.nativeElement.querySelector('filter-menu').getShowTags();
-        // var remove = this.fMenu.nativeElement.getRemoveTags();
-        // var temp = [];
-        // maybe randomly choose one of the tags and then one place in tags
-        // var tagIndex = Math.random() * show.length;
-        // var chosenTag = show[tagIndex];
-        this.placeService.getTaggedPlaces('mexican,japanese')
+        var _this = this;
+        this.show = this.e5.getShowTags();
+        this.remove = this.e5.getRemoveTags();
+        this.placeService.getTaggedPlaces(this.show + '-' + this.remove)
             .subscribe(function (places) {
-            console.log(places);
-            for (var j = 0; j < places.length; j++) {
-                //temp.push(places[j]);
-            }
+            _this.fP = places;
+            console.log(_this.fP);
+            console.log(_this.fP.length);
+            _this.prev = Math.floor(Math.random() * _this.fP.length);
+            console.log(_this.prev);
+            _this.filteredPlace = _this.fP[_this.prev].name;
         });
+    };
+    PlacesComponent.prototype.ngAfterViewInit = function () {
+        console.log("after init");
+        console.log(this.e4.nativeElement);
     };
     __decorate([
         core_2.ViewChild('myPlaces'),
@@ -88,11 +93,15 @@ var PlacesComponent = (function () {
         core_2.ViewChild('generateDiv'),
         __metadata("design:type", core_2.ElementRef)
     ], PlacesComponent.prototype, "e4", void 0);
+    __decorate([
+        core_2.ViewChild(filter_menu_component_1.FilterMenuComponent),
+        __metadata("design:type", filter_menu_component_1.FilterMenuComponent)
+    ], PlacesComponent.prototype, "e5", void 0);
     PlacesComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'places',
-            template: "\n    <div #adding>\n        <button (click)=\"openCard()\">+</button>\n        <add-card #myCards></add-card>\n    </div>\n    <div #generateDiv>\n        <select #selectCity (onchange)=\"switchCity()\">\n            <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n        </select>\n        <filter-menu></filter-menu>\n        <button class=\"generate\" (click)=\"generate()\">idk you choose!</button>\n    </div>\n    <div #myPlaces style=\"display:flex; margin-left: 50px\">\n        <div *ngFor=\"let place of filteredPlaces; let i = index\" class=\"item\" [class.active]=\"i==0\">\n            {{ place.name }}\n        </div>\n        <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n    </div>",
+            template: "\n    <div #adding>\n        <button (click)=\"openCard()\">+</button>\n        <add-card #myCards></add-card>\n    </div>\n    <div #generateDiv>\n        <select #selectCity (onchange)=\"switchCity()\">\n            <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n        </select>\n        <filter-menu #fm></filter-menu>\n        <button class=\"generate\" (click)=\"generate()\">idk you choose!</button>\n    </div>\n    <div #myPlaces style=\"display:flex; margin-left: 50px\">\n        <div class=\"item\">\n            {{ filteredPlace }}\n        </div>\n        <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n    </div>",
             styles: ["\n        .generate {\n            margin-top: 20px;\n            background: white;\n            color: black;\n            border: none;\n            outline: none;\n        }\n    "]
         }),
         __metadata("design:paramtypes", [place_service_1.PlaceService, yelpfusion_service_1.YelpFusionService])
