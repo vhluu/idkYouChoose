@@ -35,6 +35,6 @@ app.use('/api', places); // to interact with api
 app.use('/yfapi', yelpfusion);
 
 // conncting to port
-app.listen(port, function() {
+app.listen(process.env.PORT || port, function() {
     console.log('Server started on port ' + port);
 });

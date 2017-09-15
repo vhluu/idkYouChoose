@@ -7,7 +7,7 @@ declare var $: any;
     moduleId: module.id,
     selector: 'filter-menu',
     template: `
-    <div #first>
+    <div>
       <h4>I'm feeling:</h4>
       <div #first>
         <div style="display:flex; flex-direction:row">
@@ -35,6 +35,7 @@ declare var $: any;
             </select>
         </div>
       </div>
+      <button (click)="resetFilters()">Reset</button>
     </div>`,
     styles: [`
         div {
@@ -124,5 +125,12 @@ export class FilterMenuComponent {
         }
         console.log("remove tags are " + str);
         return str;
+    }
+
+    resetFilters() {
+        this.toShow = [];
+        this.toRemove = [];
+        this.firstDiv.nativeElement.querySelector('select').value = "";
+        this.secondDiv.nativeElement.querySelector('select').value = "";
     }
 }

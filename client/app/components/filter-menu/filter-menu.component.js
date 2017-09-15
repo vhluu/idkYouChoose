@@ -68,6 +68,12 @@ var FilterMenuComponent = (function () {
         console.log("remove tags are " + str);
         return str;
     };
+    FilterMenuComponent.prototype.resetFilters = function () {
+        this.toShow = [];
+        this.toRemove = [];
+        this.firstDiv.nativeElement.querySelector('select').value = "";
+        this.secondDiv.nativeElement.querySelector('select').value = "";
+    };
     __decorate([
         core_2.ViewChild('first'),
         __metadata("design:type", core_2.ElementRef)
@@ -80,7 +86,7 @@ var FilterMenuComponent = (function () {
         core_1.Component({
             moduleId: module.id,
             selector: 'filter-menu',
-            template: "\n    <div #first>\n      <h4>I'm feeling:</h4>\n      <div #first>\n        <div style=\"display:flex; flex-direction:row\">\n            <select (change)=\"show($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n        <div *ngFor=\"let showing of toShow\" style=\"display:flex; flex-direction:row\">  \n            <select (change)=\"show($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n\n      </div>\n      <h4>I'm not feeling:</h4>\n      <div #second>\n        <div style=\"display:flex; flex-direction:row\">\n            <select (change)=\"remove($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n        <div *ngFor=\"let removing of toRemove\" style=\"display:flex; flex-direction:row\">  \n            <select (change)=\"remove($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n      </div>\n    </div>",
+            template: "\n    <div>\n      <h4>I'm feeling:</h4>\n      <div #first>\n        <div style=\"display:flex; flex-direction:row\">\n            <select (change)=\"show($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n        <div *ngFor=\"let showing of toShow\" style=\"display:flex; flex-direction:row\">  \n            <select (change)=\"show($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n\n      </div>\n      <h4>I'm not feeling:</h4>\n      <div #second>\n        <div style=\"display:flex; flex-direction:row\">\n            <select (change)=\"remove($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n        <div *ngFor=\"let removing of toRemove\" style=\"display:flex; flex-direction:row\">  \n            <select (change)=\"remove($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n      </div>\n      <button (click)=\"resetFilters()\">Reset</button>\n    </div>",
             styles: ["\n        div {\n          background: inherit;\n          color: white\n          width: 200px;\n        }\n \n        h4 {\n          padding-top: 20px;\n          padding-bottom: 5px;\n        }\n\n        select {\n            margin-bottom: 5px;\n            border: none;\n            outline: none;\n        }\n    "]
         }),
         __metadata("design:paramtypes", [core_1.ComponentFactoryResolver, place_service_1.PlaceService])

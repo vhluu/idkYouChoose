@@ -131,8 +131,6 @@ export class PlacesComponent {
             this.filteredPlace = this.fP[this.prev].name;
             
         });
-
-
     }
 
     ngAfterViewInit() {
