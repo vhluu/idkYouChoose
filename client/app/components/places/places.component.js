@@ -49,10 +49,12 @@ var PlacesComponent = (function () {
     };
     PlacesComponent.prototype.changeItem = function () {
         var rand;
-        do {
-            rand = Math.floor(Math.random() * this.fP.length);
-        } while (rand == this.prev);
-        this.prev = rand;
+        if (this.fP.length > 1) {
+            do {
+                rand = Math.floor(Math.random() * this.fP.length);
+            } while (rand == this.prev);
+            this.prev = rand;
+        }
         console.log(this.prev);
         this.filteredPlace = this.fP[this.prev].name;
     };

@@ -7,6 +7,8 @@ var bodyParser = require('body-parser'); // bring in the body parser
 var index = require('./routes/index'); // our homepage
 var places = require('./routes/places'); // the API so that we can work with mongodb
 var yelpfusion = require('./routes/yelpfusion'); // API for YelpFusion
+var passport = require('passport');
+var social = require('./app/passport/passport');
 
 var port = 3001;
 

@@ -9,11 +9,14 @@
   "author": "Vanna",
   "license": "ISC",
   "dependencies": {
+    "angular2-jwt": "^0.2.3",
     "body-parser": "^1.17.2",
+    "bootstrap-social": "^5.1.1",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
     "jquery": "^3.2.1",
     "mongojs": "^2.4.1",
+    "passport-facebook": "^2.1.1",
     "request": "^2.81.0"
   },
   "devDependencies": {

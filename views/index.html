@@ -6,7 +6,7 @@
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
           <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
-          <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+          <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
           <link rel="stylesheet" href="style.css">
           <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
           rel="stylesheet">
@@ -23,6 +23,7 @@
           <script src="node_modules/angular2/bundles/router.dev.js"></script>-->
           <!-- 2. Configure SystemJS -->
           <script src="systemjs.config.js"></script>
+          <script src="//connect.facebook.net/en_US/sdk.js"></script>
         
           <!--<script src="node_modules/angular2/bundles/http.dev.js"></script>-->
           <script>
@@ -31,6 +32,25 @@
         </head>
         <!-- 3. Display the application -->
         <body>
+          <!--<script>
+              window.fbAsyncInit = function() {
+                FB.init({
+                  appId      : '171638416735699',
+                  cookie     : true,
+                  xfbml      : true,
+                  version    : '2.10'
+                });
+                FB.AppEvents.logPageView();   
+              };
+            
+              (function(d, s, id){
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {return;}
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+              }(document, 'script', 'facebook-jssdk'));
+            </script>-->
           <my-app>Loading...</my-app>
         </body>
       </html>
