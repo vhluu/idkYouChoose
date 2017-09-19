@@ -8,7 +8,19 @@ var index = require('./routes/index'); // our homepage
 var places = require('./routes/places'); // the API so that we can work with mongodb
 var yelpfusion = require('./routes/yelpfusion'); // API for YelpFusion
 var passport = require('passport');
-var social = require('./app/passport/passport');
+//var social = require('./app/passport/passport');
+/*var Strategy = require('passport-facebook').Strategy;
+
+passport.use(new Strategy ({
+    clientID: '171638416735699',
+    clientSecret: '6999f5342b94e408deaf280190d956e3',
+    callbackURL: 'http:localhost:3001/login/facebook/return'
+}, 
+    // verify function 
+    function(accessToken, refreshToken, profile, cb) {
+        return cb(null, profile);
+    }
+))*/
 
 var port = 3001;
 

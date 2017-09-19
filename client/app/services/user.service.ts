@@ -9,6 +9,7 @@ declare const FB:any;
 @Injectable()
 export class UserService {
     constructor(private http: AuthHttp) {
+        // initializing library that is used to communicate with facebook
         FB.init({
           appId      : '171638416735699',
           status     : false, // the SDK will attempt to get info about the current user immediately after init
@@ -21,29 +22,36 @@ export class UserService {
     
       fbLogin() {
         return new Promise((resolve, reject) => {
-          FB.login(result => {
+          // try to get user's data. will open fb login dialog if ser is not logged in 
+          FB.login(result => { // result contains info about whether user is logged in & allowed access
             if (result.authResponse) {
-              return this.http.post(`http://localhost:3000/api/auth/facebook`, {access_token: result.authResponse.accessToken})
-                  .toPromise()
-                  .then(response => {
+              // try to login user in backend
+              return this.http.post('http://localhost:3000/api/auth/facebook', {access_token: result.authResponse.accessToken})
+                  .toPromise() // converts an observable to a promise
+                  // then and catch will execute when the promise is fulfilled or rejected
+                  .then(response => { 
                     var token = response.headers.get('x-auth-token');
                     if (token) {
-                      localStorage.setItem('id_token', token);
+                      localStorage.setItem('idToken', token);
                     }
-                    resolve(response.json());
+                    resolve(response.json()); // returns user data
                   })
                   .catch(() => reject());
             } else {
-              reject();
+              reject(); // fails
             }
-          }, {scope: 'public_profile,email'})
+
+          }, {scope: 'public_profile,email,user_friends'}) // list of permissions to request from user
         });
       }
     
+      // deletes token from local storage
       logout() {
-        localStorage.removeItem('id_token');
+        localStorage.removeItem('idToken');
       }
     
+
+      // boolean from whether user is logged in or not
       isLoggedIn() {
         return new Promise((resolve, reject) => {
           this.getCurrentUser().then(user => resolve(true)).catch(() => reject(false));
@@ -52,7 +60,7 @@ export class UserService {
     
       getCurrentUser() {
         return new Promise((resolve, reject) => {
-          return this.http.get(`http://localhost:3000/api/auth/me`).toPromise().then(response => {
+          return this.http.get('http://localhost:3000/api/auth/me').toPromise().then(response => {
             resolve(response.json());
           }).catch(() => reject());
         });
