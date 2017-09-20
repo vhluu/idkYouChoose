@@ -9,20 +9,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
 var http_1 = require("@angular/http");
+var angular2_jwt_1 = require("angular2-jwt");
 var forms_1 = require("@angular/forms");
 var app_component_1 = require("./app.component");
 var places_component_1 = require("./components/places/places.component");
 var add_card_component_1 = require("./components/add-card/add-card.component");
 var navi_menu_component_1 = require("./components/navi-menu/navi-menu.component");
 var filter_menu_component_1 = require("./components/filter-menu/filter-menu.component");
+var login_component_1 = require("./components/login/login.component");
+var app_routing_module_1 = require("./app.routing.module");
+function getAuthHttp(http) {
+    return new angular2_jwt_1.AuthHttp(new angular2_jwt_1.AuthConfig({
+        headerName: 'x-auth-token',
+        noTokenScheme: true,
+        noJwtError: true,
+        globalHeaders: [{ 'Accept': 'application/json' }],
+        tokenGetter: (function () { return localStorage.getItem('id_token'); }),
+    }), http);
+}
+exports.getAuthHttp = getAuthHttp;
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
-            imports: [platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule],
+            imports: [platform_browser_1.BrowserModule, http_1.HttpModule, forms_1.FormsModule, app_routing_module_1.AppRoutingModule],
             declarations: [app_component_1.AppComponent, places_component_1.PlacesComponent, add_card_component_1.AddCardComponent, navi_menu_component_1.NaviMenuComponent,
-                filter_menu_component_1.FilterMenuComponent],
+                filter_menu_component_1.FilterMenuComponent, login_component_1.LoginComponent],
             bootstrap: [app_component_1.AppComponent]
         })
     ], AppModule);

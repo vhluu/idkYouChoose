@@ -3,24 +3,11 @@
 var express = require('express'); // bring in express from node modules folder
 var path = require('path'); // bring in our path module
 var bodyParser = require('body-parser'); // bring in the body parser
-
+var passport = require('passport');
+var jwt = require('jsonwebtoken');
 var index = require('./routes/index'); // our homepage
 var places = require('./routes/places'); // the API so that we can work with mongodb
 var yelpfusion = require('./routes/yelpfusion'); // API for YelpFusion
-var passport = require('passport');
-//var social = require('./app/passport/passport');
-/*var Strategy = require('passport-facebook').Strategy;
-
-passport.use(new Strategy ({
-    clientID: '171638416735699',
-    clientSecret: '6999f5342b94e408deaf280190d956e3',
-    callbackURL: 'http:localhost:3001/login/facebook/return'
-}, 
-    // verify function 
-    function(accessToken, refreshToken, profile, cb) {
-        return cb(null, profile);
-    }
-))*/
 
 var port = 3001;
 
@@ -52,3 +39,17 @@ app.use('/yfapi', yelpfusion);
 app.listen(process.env.PORT || port, function() {
     console.log('Server started on port ' + port);
 });
+
+var createToken = function(auth) {
+    return jwt.sign({ id: auth.id}, 'secret', { expiresIn: '1h'});
+};
+
+var generateToken = function(req, res, next) {
+    req.token = createToken(req.auth);
+    next();
+};
+
+var sendToken = function(req, res) {
+    res.setHeader('x-auth-token', req.token);
+    res.status(200).send(req.auth);
+}
