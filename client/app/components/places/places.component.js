@@ -14,11 +14,16 @@ var place_service_1 = require("../../services/place.service");
 var yelpfusion_service_1 = require("../../services/yelpfusion.service");
 var core_2 = require("@angular/core");
 var filter_menu_component_1 = require("../filter-menu/filter-menu.component");
+var user_service_1 = require("../../services/user.service");
+var router_1 = require("@angular/router");
 var PlacesComponent = (function () {
-    function PlacesComponent(placeService, yelpFusionService) {
+    function PlacesComponent(userService, placeService, yelpFusionService, router) {
         var _this = this;
+        this.userService = userService;
         this.placeService = placeService;
         this.yelpFusionService = yelpFusionService;
+        this.router = router;
+        this.currentUser = { fullName: '' };
         this.placeService.getPlaces()
             .subscribe(function (places) {
             /*var j, x, i;
@@ -79,6 +84,20 @@ var PlacesComponent = (function () {
         console.log("after init");
         console.log(this.e4.nativeElement);
     };
+    PlacesComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.userService.getCurrentUser()
+            .then(function (profile) {
+            console.log(profile);
+            _this.currentUser = profile;
+        })
+            .catch(function () { return _this.currentUser = {}; });
+    };
+    PlacesComponent.prototype.logOut = function () {
+        this.currentUser = { fullName: '' };
+        this.userService.logout();
+        this.router.navigate(['/welcome']);
+    };
     __decorate([
         core_2.ViewChild('myPlaces'),
         __metadata("design:type", core_2.ElementRef)
@@ -103,10 +122,11 @@ var PlacesComponent = (function () {
         core_1.Component({
             moduleId: module.id,
             selector: 'places',
-            template: "\n    <div #adding>\n        <button (click)=\"openCard()\">+</button>\n        <add-card #myCards></add-card>\n    </div>\n    <div #generateDiv>\n        <select #selectCity (onchange)=\"switchCity()\">\n            <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n        </select>\n        <filter-menu #fm></filter-menu>\n        <button class=\"generate\" (click)=\"generate()\">idk you choose!</button>\n    </div>\n    <div #myPlaces style=\"display:flex; margin-left: 50px\">\n        <div class=\"item\">\n            {{ filteredPlace }}\n        </div>\n        <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n    </div>",
-            styles: ["\n        .generate {\n            margin-top: 20px;\n            background: white;\n            color: black;\n            border: none;\n            outline: none;\n        }\n    "]
+            template: "\n    <span>Hello {{ currentUser.fullName }}</span>\n    <button (click)=\"logOut()\">LOG OUT</button>\n    <div #adding>\n        <button (click)=\"openCard()\">+</button>\n        <add-card #myCards></add-card>\n    </div>\n    <div #generateDiv>\n        <select #selectCity (onchange)=\"switchCity()\">\n            <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n        </select>\n        <filter-menu #fm></filter-menu>\n        <button class=\"generate\" (click)=\"generate()\">idk you choose!</button>\n    </div>\n    <div #myPlaces style=\"display:flex; margin-left: 50px\">\n        <div class=\"item\">\n            {{ filteredPlace }}\n        </div>\n        <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n    </div>",
+            styles: ["\n        .generate {\n            margin-top: 20px;\n            background: white;\n            color: black;\n            border: none;\n            outline: none;\n        }\n    "],
+            providers: [user_service_1.UserService]
         }),
-        __metadata("design:paramtypes", [place_service_1.PlaceService, yelpfusion_service_1.YelpFusionService])
+        __metadata("design:paramtypes", [user_service_1.UserService, place_service_1.PlaceService, yelpfusion_service_1.YelpFusionService, router_1.Router])
     ], PlacesComponent);
     return PlacesComponent;
 }());

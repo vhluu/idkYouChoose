@@ -25,14 +25,17 @@ export class UserService {
           // try to get user's data. will open fb login dialog if ser is not logged in 
           FB.login(result => { // result contains info about whether user is logged in & allowed access
             if (result.authResponse) {
+              console.log("access token is " + result.authResponse.accessToken);
               // try to login user in backend
-              return this.http.post('http://localhost:3000/api/auth/facebook', {access_token: result.authResponse.accessToken})
+              return this.http.post('/api/auth/facebook', {access_token: result.authResponse.accessToken})
                   .toPromise() // converts an observable to a promise
                   // then and catch will execute when the promise is fulfilled or rejected
                   .then(response => { 
+                    console.log("x-auth-token is " + response.headers.get('x-auth-token'));
                     var token = response.headers.get('x-auth-token');
                     if (token) {
                       localStorage.setItem('idToken', token);
+                      console.log('idToken is ' + token);
                     }
                     resolve(response.json()); // returns user data
                   })
@@ -47,6 +50,7 @@ export class UserService {
     
       // deletes token from local storage
       logout() {
+        console.log('removing idToken');
         localStorage.removeItem('idToken');
       }
     
@@ -60,7 +64,7 @@ export class UserService {
     
       getCurrentUser() {
         return new Promise((resolve, reject) => {
-          return this.http.get('http://localhost:3000/api/auth/me').toPromise().then(response => {
+          return this.http.get('/api/auth/me').toPromise().then(response => {
             resolve(response.json());
           }).catch(() => reject());
         });

@@ -20,16 +20,16 @@ var LoginComponent = (function () {
     LoginComponent.prototype.fbLogin = function () {
         var _this = this;
         this.userService.fbLogin().then(function () {
-            console.log("user is logged in");
-            _this.router.navigate(['/welcome']);
+            _this.router.navigate(['/dashboard']);
         });
     };
     LoginComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'app-login',
-            template: "\n<h2>Welcome page</h2>\n<a class=\"btn btn-social btn-facebook\" (click)=\"fbLogin()\">\n    <span class=\"fa fa-facebook\"></span>  Facebook\n</a>",
-            styles: [""]
+            template: "\n<h2>Welcome page</h2>\n<a class=\"btn btn-social btn-facebook\" (click)=\"fbLogin()\">\n    <span class=\"fa fa-facebook\"></span>  Login using Facebook\n</a>",
+            styles: [""],
+            providers: [user_service_1.UserService]
         }),
         __metadata("design:paramtypes", [user_service_1.UserService, router_1.Router])
     ], LoginComponent);

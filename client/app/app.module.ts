@@ -10,6 +10,8 @@ import { NaviMenuComponent } from './components/navi-menu/navi-menu.component';
 import { FilterMenuComponent } from './components/filter-menu/filter-menu.component';
 import { LoginComponent } from './components/login/login.component';
 import { AppRoutingModule } from './app.routing.module';
+import { APP_BASE_HREF } from '@angular/common';
+import { UserService } from './services/user.service';
 
 
 export function getAuthHttp(http: Http) {
@@ -18,7 +20,7 @@ export function getAuthHttp(http: Http) {
       noTokenScheme: true,
       noJwtError: true,
       globalHeaders: [{'Accept': 'application/json'}],
-      tokenGetter: (() => localStorage.getItem('id_token')),
+      tokenGetter: (() => localStorage.getItem('idToken')),
     }), http);
   }
 
@@ -26,6 +28,7 @@ export function getAuthHttp(http: Http) {
     imports: [ BrowserModule, HttpModule, FormsModule, AppRoutingModule ],
     declarations: [ AppComponent, PlacesComponent, AddCardComponent, NaviMenuComponent,
         FilterMenuComponent, LoginComponent],
+    providers: [{provide: APP_BASE_HREF, useValue: '/'}, UserService, {provide: AuthHttp, useFactory: getAuthHttp, deps: [Http]}],
     bootstrap: [ AppComponent ]
 })
 

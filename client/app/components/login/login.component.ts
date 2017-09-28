@@ -10,9 +10,10 @@ import { Router } from '@angular/router';
     template: `
 <h2>Welcome page</h2>
 <a class="btn btn-social btn-facebook" (click)="fbLogin()">
-    <span class="fa fa-facebook"></span>  Facebook
+    <span class="fa fa-facebook"></span>  Login using Facebook
 </a>`,
-    styles: [``]
+    styles: [``],
+    providers: [ UserService ]
 })
 
 
@@ -20,14 +21,13 @@ import { Router } from '@angular/router';
 export class LoginComponent {
 
 
-    constructor(private userService: UserService, private router: Router) {
+    constructor(private userService:UserService, private router:Router) {
        
     }
 
     fbLogin() {
         this.userService.fbLogin().then(() => {
-            console.log("user is logged in");
-            this.router.navigate(['/welcome']);
+            this.router.navigate(['/dashboard']);
         }); 
     }
 

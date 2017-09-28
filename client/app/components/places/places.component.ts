@@ -4,6 +4,8 @@ import { YelpFusionService } from '../../services/yelpfusion.service';
 import { Place } from '../../../Place';
 import { ViewChild, ElementRef } from '@angular/core';
 import { FilterMenuComponent } from '../filter-menu/filter-menu.component';
+import { UserService } from '../../services/user.service';
+import { Router } from '@angular/router';
 declare var $: any;
 
 
@@ -11,6 +13,8 @@ declare var $: any;
     moduleId: module.id,
     selector: 'places',
     template: `
+    <span>Hello {{ currentUser.fullName }}</span>
+    <button (click)="logOut()">LOG OUT</button>
     <div #adding>
         <button (click)="openCard()">+</button>
         <add-card #myCards></add-card>
@@ -36,7 +40,8 @@ declare var $: any;
             border: none;
             outline: none;
         }
-    `]
+    `],
+    providers: [ UserService ]
 
 })
 
@@ -64,7 +69,9 @@ export class PlacesComponent {
     fP: any;
     prev: number;
 
-    constructor(private placeService:PlaceService, private yelpFusionService:YelpFusionService) {
+    currentUser: any = { fullName : ''};
+
+    constructor(private userService:UserService, private placeService:PlaceService, private yelpFusionService:YelpFusionService, private router:Router) {
         this.placeService.getPlaces()
             .subscribe(places => {
                 /*var j, x, i;
@@ -140,7 +147,20 @@ export class PlacesComponent {
         console.log(this.e4.nativeElement);
     }
 
+    ngOnInit() {
+        this.userService.getCurrentUser()
+            .then(profile => {
+                console.log(profile);
+                this.currentUser = profile;
+            })
+            .catch(() => this.currentUser = {});
+    }
 
+    logOut() {
+        this.currentUser = { fullName : ''}; 
+        this.userService.logout();
+        this.router.navigate(['/welcome']);
+    }
 
     
 

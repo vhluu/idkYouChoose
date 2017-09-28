@@ -14,10 +14,12 @@ export class AnonGuard implements CanActivate {
             // navigates to dashboard if the user is logged in through fb
             this.userService.isLoggedIn() 
                 .then(() => {
+                    console.log('user is logged in');
                     this.router.navigate(['/dashboard']);
                     reject(false);
                 })
                 .catch(() => {
+                    console.log('user not logged in');
                     resolve(true);
                 });
         });

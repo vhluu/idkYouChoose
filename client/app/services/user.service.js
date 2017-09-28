@@ -32,13 +32,16 @@ var UserService = (function () {
             // try to get user's data. will open fb login dialog if ser is not logged in 
             FB.login(function (result) {
                 if (result.authResponse) {
+                    console.log("access token is " + result.authResponse.accessToken);
                     // try to login user in backend
-                    return _this.http.post('http://localhost:3000/api/auth/facebook', { access_token: result.authResponse.accessToken })
+                    return _this.http.post('/api/auth/facebook', { access_token: result.authResponse.accessToken })
                         .toPromise() // converts an observable to a promise
                         .then(function (response) {
+                        console.log("x-auth-token is " + response.headers.get('x-auth-token'));
                         var token = response.headers.get('x-auth-token');
                         if (token) {
                             localStorage.setItem('idToken', token);
+                            console.log('idToken is ' + token);
                         }
                         resolve(response.json()); // returns user data
                     })
@@ -52,6 +55,7 @@ var UserService = (function () {
     };
     // deletes token from local storage
     UserService.prototype.logout = function () {
+        console.log('removing idToken');
         localStorage.removeItem('idToken');
     };
     // boolean from whether user is logged in or not
@@ -64,7 +68,7 @@ var UserService = (function () {
     UserService.prototype.getCurrentUser = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
-            return _this.http.get('http://localhost:3000/api/auth/me').toPromise().then(function (response) {
+            return _this.http.get('/api/auth/me').toPromise().then(function (response) {
                 resolve(response.json());
             }).catch(function () { return reject(); });
         });

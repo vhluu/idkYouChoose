@@ -23,10 +23,12 @@ var AnonGuard = (function () {
             // navigates to dashboard if the user is logged in through fb
             _this.userService.isLoggedIn()
                 .then(function () {
+                console.log('user is logged in');
                 _this.router.navigate(['/dashboard']);
                 reject(false);
             })
                 .catch(function () {
+                console.log('user not logged in');
                 resolve(true);
             });
         });
