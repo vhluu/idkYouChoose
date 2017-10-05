@@ -12,24 +12,36 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var core_2 = require("@angular/core");
 var place_service_1 = require("../../services/place.service");
+var user_service_1 = require("../../services/user.service");
 var FilterMenuComponent = (function () {
-    function FilterMenuComponent(resolver, placeService) {
-        var _this = this;
+    function FilterMenuComponent(userService, resolver, placeService) {
+        //this.firstTags.push('');
+        //this.firstTags.push('value1');
+        //   this.firstTags.push('value2');
+        this.userService = userService;
         this.resolver = resolver;
         this.placeService = placeService;
         this.selectTags = [""];
         this.toShow = [];
         this.toRemove = [];
-        this.placeService.getDistinctTags("San Diego")
-            .subscribe(function (distinct) {
-            for (var i = 0; i < distinct.length; i++) {
-                _this.selectTags.push(distinct[i]);
-            }
-        });
-        //this.firstTags.push('');
-        //this.firstTags.push('value1');
-        //   this.firstTags.push('value2');
+        this.currentUser = { fullName: '' };
     }
+    FilterMenuComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.userService.getCurrentUser()
+            .then(function (profile) {
+            console.log(profile);
+            _this.currentUser = profile;
+            _this.placeService.getDistinctTags(_this.currentUser.user_id, "San Diego")
+                .subscribe(function (distinct) {
+                console.log(distinct);
+                for (var i = 0; i < distinct.length; i++) {
+                    _this.selectTags.push(distinct[i]);
+                }
+            });
+        })
+            .catch(function () { return _this.currentUser = {}; });
+    };
     FilterMenuComponent.prototype.show = function (value) {
         if (value != "")
             this.toShow.push(value);
@@ -87,9 +99,10 @@ var FilterMenuComponent = (function () {
             moduleId: module.id,
             selector: 'filter-menu',
             template: "\n    <div>\n      <h4>I'm feeling:</h4>\n      <div #first>\n        <div style=\"display:flex; flex-direction:row\">\n            <select (change)=\"show($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n        <div *ngFor=\"let showing of toShow\" style=\"display:flex; flex-direction:row\">  \n            <select (change)=\"show($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n\n      </div>\n      <h4>I'm not feeling:</h4>\n      <div #second>\n        <div style=\"display:flex; flex-direction:row\">\n            <select (change)=\"remove($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n        <div *ngFor=\"let removing of toRemove\" style=\"display:flex; flex-direction:row\">  \n            <select (change)=\"remove($event.target.value)\">\n                <option *ngFor=\"let tag of selectTags\" value=\"{{ tag }}\">{{ tag }}</option>\n            </select>\n        </div>\n      </div>\n      <button (click)=\"resetFilters()\">Reset</button>\n    </div>",
-            styles: ["\n        div {\n          background: inherit;\n          color: white\n          width: 200px;\n        }\n \n        h4 {\n          padding-top: 20px;\n          padding-bottom: 5px;\n        }\n\n        select {\n            margin-bottom: 5px;\n            border: none;\n            outline: none;\n        }\n    "]
+            styles: ["\n        div {\n          background: inherit;\n          color: white\n          width: 200px;\n        }\n \n        h4 {\n          padding-top: 20px;\n          padding-bottom: 5px;\n        }\n\n        select {\n            margin-bottom: 5px;\n            border: none;\n            outline: none;\n        }\n    "],
+            providers: [user_service_1.UserService]
         }),
-        __metadata("design:paramtypes", [core_1.ComponentFactoryResolver, place_service_1.PlaceService])
+        __metadata("design:paramtypes", [user_service_1.UserService, core_1.ComponentFactoryResolver, place_service_1.PlaceService])
     ], FilterMenuComponent);
     return FilterMenuComponent;
 }());

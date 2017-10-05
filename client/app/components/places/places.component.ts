@@ -13,25 +13,36 @@ declare var $: any;
     moduleId: module.id,
     selector: 'places',
     template: `
-    <span>Hello {{ currentUser.fullName }}</span>
-    <button (click)="logOut()">LOG OUT</button>
-    <div #adding>
-        <button (click)="openCard()">+</button>
-        <add-card #myCards></add-card>
+<div class="container">
+    <div class="header">
+        <h2>idkYouChoose</h2>
     </div>
-    <div #generateDiv>
-        <select #selectCity (onchange)="switchCity()">
-            <option *ngFor="let loc of uniqueLocations" value="{{ loc }}">{{ loc }}</option>
-        </select>
-        <filter-menu #fm></filter-menu>
-        <button class="generate" (click)="generate()">idk you choose!</button>
-    </div>
-    <div #myPlaces style="display:flex; margin-left: 50px">
-        <div class="item">
-            {{ filteredPlace }}
+    <div style="display:flex; flex-direction:row">
+    <navi-menu></navi-menu>
+    <div>
+        <span style="margin-left:20px; padding-top:20px">Hello {{ currentUser.fullName }}</span>
+        <button (click)="logOut()">LOG OUT</button>
+        <div style="margin-left:50px; display:flex; flex-direction:row; margin-top:60px; margin-bottom:70px">
+            <div #adding>
+                <button (click)="openCard()">+</button>
+                <add-card #myCards></add-card>
+            </div>
+            <div #generateDiv>
+                <select #selectCity (onchange)="switchCity()">
+                    <option *ngFor="let loc of uniqueLocations" value="{{ loc }}">{{ loc }}</option>
+                </select>
+                <filter-menu #fm></filter-menu>
+                <button class="generate" (click)="generate()">idk you choose!</button>
+            </div>
+            <div #myPlaces style="display:flex; margin-left: 50px">
+                <div class="item">
+                    {{ filteredPlace }}
+                </div>
+                <button #next (click)="changeItem()"><i class="material-icons">refresh</i></button>
+            </div>
         </div>
-        <button #next (click)="changeItem()"><i class="material-icons">refresh</i></button>
-    </div>`,
+    </div>
+</div>`,
     styles: [`
         .generate {
             margin-top: 20px;
@@ -72,30 +83,6 @@ export class PlacesComponent {
     currentUser: any = { fullName : ''};
 
     constructor(private userService:UserService, private placeService:PlaceService, private yelpFusionService:YelpFusionService, private router:Router) {
-        this.placeService.getPlaces()
-            .subscribe(places => {
-                /*var j, x, i;
-                for (i = places.length; i; i--) {
-                    j = Math.floor(Math.random() * i);
-                    x = places[i - 1];
-                    places[i - 1] = places[j];
-                    places[j] = x;
-                }*/
-                var i;
-                console.log(places);
-                this.places = places;
-                this.uniqueLocations = [];
-                this.showing = 0;
-
-                for (i = 0; i < this.places.length; i++) {
-                    if (this.uniqueLocations.indexOf(this.places[i].location) == -1) {
-                        this.uniqueLocations.push(this.places[i].location);
-                    }
-                }
-                console.log("uniqueLocations is " + this.uniqueLocations);
-
-                //this.selectedCity = this.e2.nativeElement.querySelector('[selected="selected"]').value;
-            });
         
            
         // we want our place initially based on our current location
@@ -129,7 +116,7 @@ export class PlacesComponent {
         this.show = this.e5.getShowTags();
         this.remove = this.e5.getRemoveTags();
        
-        this.placeService.getTaggedPlaces(this.show + '-' + this.remove)
+        this.placeService.getTaggedPlaces(this.currentUser.user_id, this.show + '-' + this.remove)
         .subscribe(places => {
             this.fP = places;
             console.log(this.fP);
@@ -137,7 +124,7 @@ export class PlacesComponent {
             this.prev = Math.floor(Math.random() * this.fP.length);
             
             console.log(this.prev);
-            this.filteredPlace = this.fP[this.prev].name;
+            this.filteredPlace = this.fP[this.prev];
             
         });
     }
@@ -145,6 +132,8 @@ export class PlacesComponent {
     ngAfterViewInit() {
         console.log("after init");
         console.log(this.e4.nativeElement);
+
+        
     }
 
     ngOnInit() {
@@ -152,8 +141,36 @@ export class PlacesComponent {
             .then(profile => {
                 console.log(profile);
                 this.currentUser = profile;
+
+                this.placeService.getPlaces(this.currentUser.user_id)
+                .subscribe(places => {
+                    /*var j, x, i;
+                    for (i = places.length; i; i--) {
+                        j = Math.floor(Math.random() * i);
+                        x = places[i - 1];
+                        places[i - 1] = places[j];
+                        places[j] = x;
+                    }*/
+                    var i;
+                    console.log(places);
+                    this.places = places;
+                    this.uniqueLocations = [];
+                    this.showing = 0;
+    
+                    for (i = 0; i < this.places.length; i++) {
+                        if (this.uniqueLocations.indexOf(this.places[i].location) == -1) {
+                            this.uniqueLocations.push(this.places[i].location);
+                        }
+                    }
+                    console.log("uniqueLocations is " + this.uniqueLocations);
+    
+                    //this.selectedCity = this.e2.nativeElement.querySelector('[selected="selected"]').value;
+                });
             })
             .catch(() => this.currentUser = {});
+        
+            
+        
     }
 
     logOut() {

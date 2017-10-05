@@ -47,7 +47,7 @@ app.use('/yfapi', yelpfusion);
 
 var corsOption = {
     origin: true,
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     exposedHeaders: ['x-auth-token']
 };

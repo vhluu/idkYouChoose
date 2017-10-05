@@ -3,6 +3,7 @@ import { PlaceService } from '../../services/place.service';
 import { YelpFusionService } from '../../services/yelpfusion.service';
 import { Place } from '../../../Place';
 import { ViewChild, ElementRef } from '@angular/core';
+import { UserService } from '../../services/user.service';
 declare var $: any;
 
 @Component({
@@ -75,7 +76,8 @@ declare var $: any;
         span {
             color: black;
         }
-    `]
+    `],
+    providers: [ UserService ]
 })
 
 
@@ -98,11 +100,21 @@ export class AddCardComponent {
     tags: string [] = [];
     tagName: string;
 
-    constructor(private placeService:PlaceService, private yelpFusionService:YelpFusionService) {
+    currentUser: any = { fullName : ''};
+
+    constructor(private userService:UserService, private placeService:PlaceService, private yelpFusionService:YelpFusionService) {
        
     }
 
 
+    ngOnInit() {
+        this.userService.getCurrentUser()
+            .then(profile => {
+                console.log(profile);
+                this.currentUser = profile;
+            })
+            .catch(() => this.currentUser = {});   
+    }
     // when adding a place, once we submit our form, then we call this method
     // it will get the search results and then display them for the user to select
     submitSearch() {
@@ -136,7 +148,8 @@ export class AddCardComponent {
             location: this.found[this.selectedResult].location.city,
             tags: this.tags
         };
-       this.placeService.addPlace(toAdd)
+        console.log(toAdd);
+       this.placeService.addPlace(this.currentUser.user_id, toAdd)
         .subscribe(place => {
            
         });
@@ -153,7 +166,7 @@ export class AddCardComponent {
     }
 
 
-    addPlace(event) {
+    /*addPlace(event) {
         event.preventDefault();
         console.log(this.city);
         console.log(this.name);
@@ -162,7 +175,7 @@ export class AddCardComponent {
             location: this.city
         };
 
-        this.placeService.addPlace(newPlace) 
+        this.placeService.addPlace(this.currentUser.user_id, newPlace) 
             .subscribe(place => {
                 this.places.push(place);
                 this.name = '';
@@ -172,7 +185,7 @@ export class AddCardComponent {
             this.uniqueLocations.push(this.city);
         }
         console.log(this.uniqueLocations);
-    }
+    }*/
 
 
 

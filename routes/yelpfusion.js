@@ -3,6 +3,7 @@ var router = express.Router();
 var request = require('request');
 
 router.get('/:term/:loc', function(req, res, next) {
+    console.log('getting search results');
     var url = 'https://api.yelp.com/v3/businesses/search';
     url = url + '?term=' + req.params.term + '&location=' + req.params.loc + '&limit=3';
     console.log("the url is " + url);

@@ -18,36 +18,40 @@ var PlaceService = (function () {
         this.http = http;
         console.log('Place Service Initialized...');
     }
-    PlaceService.prototype.getPlaces = function () {
-        return this.http.get('/api/places') // make get request to our api
+    PlaceService.prototype.getPlaces = function (id) {
+        console.log('user id is ' + id);
+        return this.http.get('/api/user/' + id + '/places') // make get request to our api
             .map(function (res) { return res.json(); });
     };
-    PlaceService.prototype.getTaggedPlaces = function (tagName) {
-        return this.http.get('/api/places/' + tagName)
+    PlaceService.prototype.getTaggedPlaces = function (id, tagName) {
+        return this.http.get('/api/user/' + id + '/places/' + tagName)
             .map(function (res) { return res.json(); });
     };
-    PlaceService.prototype.getDistinctTags = function (loc) {
-        return this.http.get('/api/distinct/' + loc)
+    // get distinct tags for a specific location
+    PlaceService.prototype.getDistinctTags = function (id, loc) {
+        return this.http.get('/api/user/' + id + '/places/' + loc + '/tags')
             .map(function (res) { return res.json(); });
     };
-    PlaceService.prototype.addPlace = function (newPlace) {
+    // we have to be professional so drin/p isnt affliated with our org
+    // unique pledging experience
+    PlaceService.prototype.addPlace = function (id, newPlace) {
         console.log("new place is " + newPlace);
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
         // post request. we want the place as a string
-        return this.http.post('/api/place', JSON.stringify(newPlace), { headers: headers })
+        return this.http.put('/api/user/' + id + '/places', JSON.stringify(newPlace), { headers: headers })
             .map(function (res) { return res.json(); });
     };
-    PlaceService.prototype.deletePlace = function (id) {
+    PlaceService.prototype.deletePlace = function (id, pid) {
         // delete request
-        return this.http.delete('/api/place/' + id)
+        return this.http.delete('/api/user/' + id + '/place/' + pid)
             .map(function (res) { return res.json(); });
     };
-    PlaceService.prototype.updateStatus = function (place) {
+    PlaceService.prototype.updatePlace = function (id, place) {
         var headers = new http_1.Headers();
         headers.append('Content-Type', 'application/json');
         // put request
-        return this.http.put('/api/place/' + place._id, JSON.stringify(place), { headers: headers })
+        return this.http.put('/api/user/' + id + '/place/' + place.pid, JSON.stringify(place), { headers: headers })
             .map(function (res) { return res.json(); });
     };
     PlaceService = __decorate([

@@ -18,35 +18,12 @@ var user_service_1 = require("../../services/user.service");
 var router_1 = require("@angular/router");
 var PlacesComponent = (function () {
     function PlacesComponent(userService, placeService, yelpFusionService, router) {
-        var _this = this;
+        // we want our place initially based on our current location
         this.userService = userService;
         this.placeService = placeService;
         this.yelpFusionService = yelpFusionService;
         this.router = router;
         this.currentUser = { fullName: '' };
-        this.placeService.getPlaces()
-            .subscribe(function (places) {
-            /*var j, x, i;
-            for (i = places.length; i; i--) {
-                j = Math.floor(Math.random() * i);
-                x = places[i - 1];
-                places[i - 1] = places[j];
-                places[j] = x;
-            }*/
-            var i;
-            console.log(places);
-            _this.places = places;
-            _this.uniqueLocations = [];
-            _this.showing = 0;
-            for (i = 0; i < _this.places.length; i++) {
-                if (_this.uniqueLocations.indexOf(_this.places[i].location) == -1) {
-                    _this.uniqueLocations.push(_this.places[i].location);
-                }
-            }
-            console.log("uniqueLocations is " + _this.uniqueLocations);
-            //this.selectedCity = this.e2.nativeElement.querySelector('[selected="selected"]').value;
-        });
-        // we want our place initially based on our current location
     }
     PlacesComponent.prototype.openCard = function () {
         console.log("e3 is " + JSON.stringify(this.e3.nativeElement.querySelector('div')));
@@ -70,14 +47,14 @@ var PlacesComponent = (function () {
         var _this = this;
         this.show = this.e5.getShowTags();
         this.remove = this.e5.getRemoveTags();
-        this.placeService.getTaggedPlaces(this.show + '-' + this.remove)
+        this.placeService.getTaggedPlaces(this.currentUser.user_id, this.show + '-' + this.remove)
             .subscribe(function (places) {
             _this.fP = places;
             console.log(_this.fP);
             console.log(_this.fP.length);
             _this.prev = Math.floor(Math.random() * _this.fP.length);
             console.log(_this.prev);
-            _this.filteredPlace = _this.fP[_this.prev].name;
+            _this.filteredPlace = _this.fP[_this.prev];
         });
     };
     PlacesComponent.prototype.ngAfterViewInit = function () {
@@ -90,6 +67,28 @@ var PlacesComponent = (function () {
             .then(function (profile) {
             console.log(profile);
             _this.currentUser = profile;
+            _this.placeService.getPlaces(_this.currentUser.user_id)
+                .subscribe(function (places) {
+                /*var j, x, i;
+                for (i = places.length; i; i--) {
+                    j = Math.floor(Math.random() * i);
+                    x = places[i - 1];
+                    places[i - 1] = places[j];
+                    places[j] = x;
+                }*/
+                var i;
+                console.log(places);
+                _this.places = places;
+                _this.uniqueLocations = [];
+                _this.showing = 0;
+                for (i = 0; i < _this.places.length; i++) {
+                    if (_this.uniqueLocations.indexOf(_this.places[i].location) == -1) {
+                        _this.uniqueLocations.push(_this.places[i].location);
+                    }
+                }
+                console.log("uniqueLocations is " + _this.uniqueLocations);
+                //this.selectedCity = this.e2.nativeElement.querySelector('[selected="selected"]').value;
+            });
         })
             .catch(function () { return _this.currentUser = {}; });
     };
@@ -122,7 +121,7 @@ var PlacesComponent = (function () {
         core_1.Component({
             moduleId: module.id,
             selector: 'places',
-            template: "\n    <span>Hello {{ currentUser.fullName }}</span>\n    <button (click)=\"logOut()\">LOG OUT</button>\n    <div #adding>\n        <button (click)=\"openCard()\">+</button>\n        <add-card #myCards></add-card>\n    </div>\n    <div #generateDiv>\n        <select #selectCity (onchange)=\"switchCity()\">\n            <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n        </select>\n        <filter-menu #fm></filter-menu>\n        <button class=\"generate\" (click)=\"generate()\">idk you choose!</button>\n    </div>\n    <div #myPlaces style=\"display:flex; margin-left: 50px\">\n        <div class=\"item\">\n            {{ filteredPlace }}\n        </div>\n        <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n    </div>",
+            template: "\n<div class=\"container\">\n    <div class=\"header\">\n        <h2>idkYouChoose</h2>\n    </div>\n    <div style=\"display:flex; flex-direction:row\">\n    <navi-menu></navi-menu>\n    <div>\n        <span style=\"margin-left:20px; padding-top:20px\">Hello {{ currentUser.fullName }}</span>\n        <button (click)=\"logOut()\">LOG OUT</button>\n        <div style=\"margin-left:50px; display:flex; flex-direction:row; margin-top:60px; margin-bottom:70px\">\n            <div #adding>\n                <button (click)=\"openCard()\">+</button>\n                <add-card #myCards></add-card>\n            </div>\n            <div #generateDiv>\n                <select #selectCity (onchange)=\"switchCity()\">\n                    <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n                </select>\n                <filter-menu #fm></filter-menu>\n                <button class=\"generate\" (click)=\"generate()\">idk you choose!</button>\n            </div>\n            <div #myPlaces style=\"display:flex; margin-left: 50px\">\n                <div class=\"item\">\n                    {{ filteredPlace }}\n                </div>\n                <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n            </div>\n        </div>\n    </div>\n</div>",
             styles: ["\n        .generate {\n            margin-top: 20px;\n            background: white;\n            color: black;\n            border: none;\n            outline: none;\n        }\n    "],
             providers: [user_service_1.UserService]
         }),

@@ -11,43 +11,47 @@ export class PlaceService {
         console.log('Place Service Initialized...');
     }
 
-    getPlaces() {
-        return this.http.get('/api/places') // make get request to our api
+    getPlaces(id) {
+        console.log('user id is ' + id);
+        return this.http.get('/api/user/' + id + '/places') // make get request to our api
             .map(res => res.json());
     }
 
-    getTaggedPlaces(tagName) {
-        return this.http.get('/api/places/' + tagName)
+    getTaggedPlaces(id, tagName) {
+        return this.http.get('/api/user/' + id + '/places/' + tagName)
             .map(res => res.json());
     }
 
-    getDistinctTags(loc) {
-        return this.http.get('/api/distinct/' + loc)
+    // get distinct tags for a specific location
+    getDistinctTags(id, loc) {
+        return this.http.get('/api/user/' + id + '/places/' + loc + '/tags')
             .map(res => res.json());
     }
 
-    addPlace(newPlace) {
+    // we have to be professional so drin/p isnt affliated with our org
+    // unique pledging experience
+    addPlace(id, newPlace) {
         console.log("new place is " + newPlace);
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
         // post request. we want the place as a string
-        return this.http.post('/api/place', JSON.stringify(newPlace), { headers: headers })
+        return this.http.put('/api/user/' + id + '/places', JSON.stringify(newPlace), { headers: headers })
             .map(res => res.json());
     }
 
-    deletePlace(id) {
+    deletePlace(id, pid) {
         // delete request
-        return this.http.delete('/api/place/' + id)
+        return this.http.delete('/api/user/' + id + '/place/' + pid)
             .map(res => res.json());
     }
 
-    updateStatus(place) {
+    updatePlace(id, place) {
         var headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
         // put request
-        return this.http.put('/api/place/' + place._id, JSON.stringify(place), { headers: headers })
+        return this.http.put('/api/user/' + id + '/place/' + place.pid, JSON.stringify(place), { headers: headers })
             .map(res => res.json());
     }
 }

@@ -1,6 +1,7 @@
 import { Component, ComponentFactoryResolver } from '@angular/core';
 import { ViewChild, ElementRef } from '@angular/core';
 import { PlaceService } from '../../services/place.service';
+import { UserService } from '../../services/user.service';
 declare var $: any;
 
 @Component({
@@ -54,7 +55,8 @@ declare var $: any;
             border: none;
             outline: none;
         }
-    `]
+    `],
+    providers: [ UserService ]
 })
 
 
@@ -68,19 +70,32 @@ export class FilterMenuComponent {
     toShow: string[] = [];
     toRemove: string[] = [];
 
+    currentUser: any = { fullName : ''};
 
-    constructor(private resolver: ComponentFactoryResolver, private placeService:PlaceService) {
-      this.placeService.getDistinctTags("San Diego")
-            .subscribe(distinct => {
-                for (var i = 0; i < distinct.length; i++) {
-                    this.selectTags.push(distinct[i]);
-                }
-            });
+
+    constructor(private userService:UserService, private resolver: ComponentFactoryResolver, private placeService:PlaceService) {
+ 
     //this.firstTags.push('');
        //this.firstTags.push('value1');
     //   this.firstTags.push('value2');
      
     
+    }
+
+    ngOnInit() {
+        this.userService.getCurrentUser()
+            .then(profile => {
+                console.log(profile);
+                this.currentUser = profile;
+                this.placeService.getDistinctTags(this.currentUser.user_id, "San Diego")
+                .subscribe(distinct => {
+                    console.log(distinct);
+                    for (var i = 0; i < distinct.length; i++) {
+                        this.selectTags.push(distinct[i]);
+                    }
+                });
+            })
+            .catch(() => this.currentUser = {});   
     }
 
     show(value) {
