@@ -27,9 +27,69 @@ router.get('/user/:id/places/:loc/tags', function(req, res, next) {
 
 router.get('/user/:id/places/:tagName', function(req, res, next) {
     var show = req.params.tagName.split('-')[0];
-    var remove;
+    var remove = req.params.tagName.split('-')[1];
     var user;
-    if (show != "" && remove != "") {
+
+    if (show == "" && remove == "") { // both are empty
+        db.places.findOne({'user_id': req.params.id},function(err, user) {
+            if (err) res.send(err);
+            console.log('places are ' + JSON.stringify(user.places));
+            res.json(user.places); // returns json content
+        });
+    }
+
+    else {
+        var array = [ 
+            { $match: { "user_id" : req.params.id }},
+           // { $unwind: "$places"},
+            { $project: {
+                places: {$filter: {
+                    input: "$places",
+                    as: "place",
+                    cond: { }
+                }}
+            }}
+        ];
+
+        if (show == "") { // show is empty and remove isnt
+            remove = remove.split(',');
+            array[1].$project.places.$filter.cond = { $and: [] };
+            for (var i = 0; i < remove.length; i++) {
+                array[1].$project.places.$filter.cond.$and.push({ $not: [{ $in: [remove[i], "$$place.tags"]}] });
+            }
+        }
+
+        else if (remove == "") { // remove is empty and show isnt
+            show = show.split(',');
+            array[1].$project.places.$filter.cond = { $or: [] };
+            for (var i = 0; i < show.length; i++) {
+                array[1].$project.places.$filter.cond.$or.push({ $in: [show[i], "$$place.tags"]});
+            }
+        }
+
+        else { // both arent empty
+            remove = (req.params.tagName.split('-')[1]).split(',');
+            show = show.split(',');
+            array[1].$project.places.$filter.cond = { $and: [ 
+                { $or: [] }, 
+            ]};
+            for (var i = 0; i < show.length; i++) {
+                array[1].$project.places.$filter.cond.$and[0].$or.push({ $in: [show[i], "$$place.tags"]});
+            }
+            for (var i = 0; i < remove.length; i++) {
+                array[1].$project.places.$filter.cond.$and.push({ $not: [{ $in: [remove[i], "$$place.tags"]}] });
+            }
+        }
+
+        db.places.aggregate(array, function(err, user) {
+            if (err) res.send(err);
+            console.log("1 " + JSON.stringify(user));
+            res.json(user.places);
+        })
+    }
+    
+
+    /*if (show != "" && remove != "") {
         remove = (req.params.tagName.split('-')[1]).split(',');
         show = show.split(',');
         console.log("show is " + show);
@@ -43,12 +103,7 @@ router.get('/user/:id/places/:tagName', function(req, res, next) {
                     as: "place",
                     cond: { $and: [ 
                         { $or: [
-                           // { $in: [ "japanese", "$$place.tags" ] },
-                            /*{ $in: [ "italian", "$$place.tags" ] }*/
-                       // { $not: [ { $in: ["mexican", "$$place.tags"] } ]}
                         ]}, 
-                        //{ $not: [ { $in: ["mexican", "$$place.tags"] } ]},
-                        /*{ $not: [ { $in: ["thai", "$$place.tags"] } ]},*/
                     ]}
                 }}
             }}
@@ -65,22 +120,8 @@ router.get('/user/:id/places/:tagName', function(req, res, next) {
             console.log("1 " + JSON.stringify(places));
             res.json(places);
         })
-        /*db.places.distinct("places.name", { "user_id": req.params.id, "places.tags" : { $in: show, $nin: remove } }, function(err, places) {
-            if (err) res.send(err);
-            console.log("1 " + JSON.stringify(places));
-            res.json(places);
-        });*/
-    }
+    }*/
 
-    else {
-        remove = (req.params.tagName.split('-')[1]).split(',');
-        console.log("remove is" + remove);
-        db.places.distinct("places.name", { "user_id": req.params.id, "places.tags" : { $nin: remove } }, function(err, places) {
-            if (err) res.send(err);
-            console.log("2 " + JSON.stringify(places));
-            res.json(places);
-        });
-    }
 
 });
 
