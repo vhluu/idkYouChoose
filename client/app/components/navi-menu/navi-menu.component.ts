@@ -8,8 +8,8 @@ declare var $: any;
     template: `<div>
       <h4>Navigation</h4>
       <ul>
-        <li>Choose Place
-        <li>My Places
+        <li (click)="choosePlace()">Choose Place</li>
+        <li (click)="myPlaces()">My Places</li>
       </ul>
     </div>`,
     styles: [`

@@ -54,12 +54,8 @@ var PlacesComponent = (function () {
             console.log(_this.fP.length);
             _this.prev = Math.floor(Math.random() * _this.fP.length);
             console.log(_this.prev);
-            _this.filteredPlace = _this.fP[_this.prev];
+            _this.filteredPlace = _this.fP[_this.prev].name;
         });
-    };
-    PlacesComponent.prototype.ngAfterViewInit = function () {
-        console.log("after init");
-        console.log(this.e4.nativeElement);
     };
     PlacesComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -78,6 +74,7 @@ var PlacesComponent = (function () {
                 }*/
                 var i;
                 console.log(places);
+                // TODO: LOOK THROUGH THIS. MAYBE ADD ROUTE TO GET UNIQUE LOCATIONS
                 _this.places = places;
                 _this.uniqueLocations = [];
                 _this.showing = 0;
@@ -121,7 +118,7 @@ var PlacesComponent = (function () {
         core_1.Component({
             moduleId: module.id,
             selector: 'places',
-            template: "\n<div class=\"container\">\n    <div class=\"header\">\n        <h2>idkYouChoose</h2>\n    </div>\n    <div style=\"display:flex; flex-direction:row\">\n    <navi-menu></navi-menu>\n    <div>\n        <span style=\"margin-left:20px; padding-top:20px\">Hello {{ currentUser.fullName }}</span>\n        <button (click)=\"logOut()\">LOG OUT</button>\n        <div style=\"margin-left:50px; display:flex; flex-direction:row; margin-top:60px; margin-bottom:70px\">\n            <div #adding>\n                <button (click)=\"openCard()\">+</button>\n                <add-card #myCards></add-card>\n            </div>\n            <div #generateDiv>\n                <select #selectCity (onchange)=\"switchCity()\">\n                    <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n                </select>\n                <filter-menu #fm></filter-menu>\n                <button class=\"generate\" (click)=\"generate()\">idk you choose!</button>\n            </div>\n            <div #myPlaces style=\"display:flex; margin-left: 50px\">\n                <div class=\"item\">\n                    {{ filteredPlace }}\n                </div>\n                <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i></button>\n            </div>\n        </div>\n    </div>\n</div>",
+            template: "\n<div class=\"container\">\n    <div class=\"header\">\n        <h2>idkYouChoose</h2>\n    </div>\n    <div style=\"color: black;\">\n        <div style=\"margin-left:20px; margin-top:10px\">Hello {{ currentUser.fullName }}!\n        <button style=\"float:right; background:white; margin-right:10px\" (click)=\"logOut()\">LOG OUT</button>\n        </div>\n        \n        <div style=\"margin-left:10px; display:flex; flex-direction:row; margin-top:60px; margin-bottom:70px\">\n            <div #adding>\n                <button style=\"background:white; margin-right:10px;\" (click)=\"openCard()\">ADD PLACE</button>\n                <add-card #myCards></add-card>\n            </div>\n            <div #generateDiv>\n                Filter by Location:<br>\n                <select #selectCity (onchange)=\"switchCity()\">\n                    <option *ngFor=\"let loc of uniqueLocations\" value=\"{{ loc }}\">{{ loc }}</option>\n                </select>\n                <filter-menu #fm></filter-menu>\n                <button class=\"generate\" (click)=\"generate()\">idk you choose!</button>\n            </div>\n            <div #myPlaces style=\"display:flex; margin-left: 50px\">\n                <div class=\"item\">\n                    {{ filteredPlace }}\n                </div>\n                <button #next (click)=\"changeItem()\"><i class=\"material-icons\">refresh</i>Try Again</button>\n            </div>\n        </div>\n</div>",
             styles: ["\n        .generate {\n            margin-top: 20px;\n            background: white;\n            color: black;\n            border: none;\n            outline: none;\n        }\n    "],
             providers: [user_service_1.UserService]
         }),

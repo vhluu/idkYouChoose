@@ -27,8 +27,8 @@ var LoginComponent = (function () {
         core_1.Component({
             moduleId: module.id,
             selector: 'app-login',
-            template: "\n<h2>Welcome page</h2>\n<a class=\"btn btn-social btn-facebook\" (click)=\"fbLogin()\">\n    <span class=\"fa fa-facebook\"></span>  Login using Facebook\n</a>",
-            styles: [""],
+            template: "\n<div class=\"container\">\n    <div class=\"header\">\n        <h2>Can't Decide Where to Eat??</h2>\n    </div>\n    <div style=\"color: black;\">\n        <p>Let us help!</p>\n        <p>With idkYouChoose, you can: </p>\n        <ul style=\"text-align:left; font-size:16px\">\n            <li>Create a personal list of places you like to eat at</li>\n            <li>Add tags so that you can filter places based on your current preferences</li>\n            <li>Generate a random place from your list so that you don't have to decide!</li>\n        </ul>\n\n        <button style=\"background:white; margin-top:20px\" (click)=\"fbLogin()\"> Login using Facebook</button>\n    </div>\n</div>\n",
+            styles: ["\n    .container {\n       width: 525px;\n       text-align: center;\n       height:400px\n    }\n\n    p {\n        font-size: 20px;\n        margin-top: 15px;\n    }\n\n    li {\n        margin-bottom:10px;\n    }\n    \n    "],
             providers: [user_service_1.UserService]
         }),
         __metadata("design:paramtypes", [user_service_1.UserService, router_1.Router])

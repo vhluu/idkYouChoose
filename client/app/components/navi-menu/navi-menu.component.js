@@ -17,7 +17,7 @@ var NaviMenuComponent = (function () {
         core_1.Component({
             moduleId: module.id,
             selector: 'navi-menu',
-            template: "<div>\n      <h4>Navigation</h4>\n      <ul>\n        <li>Choose Place\n        <li>My Places\n      </ul>\n    </div>",
+            template: "<div>\n      <h4>Navigation</h4>\n      <ul>\n        <li (click)=\"choosePlace()\">Choose Place</li>\n        <li (click)=\"myPlaces()\">My Places</li>\n      </ul>\n    </div>",
             styles: ["\n        ul {\n          list-style-type: none;\n          padding-left: 30px;\n        }\n\n        li:first-child {\n          \n        }\n\n        li {\n          margin-bottom:10px;\n        }\n\n        li:hover {\n          cursor: pointer;\n        }\n\n        div {\n          background: white;\n          color: black;\n          width: 200px;\n          height: 400px;\n        }\n \n        h4 {\n          text-align: center;\n          padding-top: 20px;\n          padding-bottom: 5px;\n        }\n    "]
         }),
         __metadata("design:paramtypes", [])

@@ -84,7 +84,7 @@ router.get('/user/:id/places/:tagName', function(req, res, next) {
         db.places.aggregate(array, function(err, user) {
             if (err) res.send(err);
             console.log("1 " + JSON.stringify(user));
-            res.json(user.places);
+            res.json(user[0].places);
         })
     }
     

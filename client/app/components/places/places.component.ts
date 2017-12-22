@@ -17,17 +17,18 @@ declare var $: any;
     <div class="header">
         <h2>idkYouChoose</h2>
     </div>
-    <div style="display:flex; flex-direction:row">
-    <navi-menu></navi-menu>
-    <div>
-        <span style="margin-left:20px; padding-top:20px">Hello {{ currentUser.fullName }}</span>
-        <button (click)="logOut()">LOG OUT</button>
-        <div style="margin-left:50px; display:flex; flex-direction:row; margin-top:60px; margin-bottom:70px">
+    <div style="color: black;">
+        <div style="margin-left:20px; margin-top:10px">Hello {{ currentUser.fullName }}!
+        <button style="float:right; background:white; margin-right:10px" (click)="logOut()">LOG OUT</button>
+        </div>
+        
+        <div style="margin-left:10px; display:flex; flex-direction:row; margin-top:60px; margin-bottom:70px">
             <div #adding>
-                <button (click)="openCard()">+</button>
+                <button style="background:white; margin-right:10px;" (click)="openCard()">Add Place</button>
                 <add-card #myCards></add-card>
             </div>
             <div #generateDiv>
+                Filter by Location:<br>
                 <select #selectCity (onchange)="switchCity()">
                     <option *ngFor="let loc of uniqueLocations" value="{{ loc }}">{{ loc }}</option>
                 </select>
@@ -38,10 +39,9 @@ declare var $: any;
                 <div class="item">
                     {{ filteredPlace }}
                 </div>
-                <button #next (click)="changeItem()"><i class="material-icons">refresh</i></button>
+                <button #next (click)="changeItem()"><i class="material-icons">refresh</i>Try Again</button>
             </div>
         </div>
-    </div>
 </div>`,
     styles: [`
         .generate {
@@ -124,18 +124,12 @@ export class PlacesComponent {
             this.prev = Math.floor(Math.random() * this.fP.length);
             
             console.log(this.prev);
-            this.filteredPlace = this.fP[this.prev];
+            this.filteredPlace = this.fP[this.prev].name;
             
         });
     }
 
-    ngAfterViewInit() {
-        console.log("after init");
-        console.log(this.e4.nativeElement);
-
-        
-    }
-
+    
     ngOnInit() {
         this.userService.getCurrentUser()
             .then(profile => {
@@ -153,6 +147,7 @@ export class PlacesComponent {
                     }*/
                     var i;
                     console.log(places);
+                    // TODO: LOOK THROUGH THIS. MAYBE ADD ROUTE TO GET UNIQUE LOCATIONS
                     this.places = places;
                     this.uniqueLocations = [];
                     this.showing = 0;
