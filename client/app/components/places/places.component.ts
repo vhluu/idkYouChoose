@@ -22,9 +22,9 @@ declare var $: any;
         <button style="float:right; background:white; margin-right:10px" (click)="logOut()">LOG OUT</button>
         </div>
         
-        <div style="margin-left:10px; display:flex; flex-direction:row; margin-top:60px; margin-bottom:70px">
+        <div style="margin-left:10px; display:flex; flex-direction:row; margin-top:40px; margin-bottom:70px">
             <div #adding>
-                <button style="background:white; margin-right:10px;" (click)="openCard()">Add Place</button>
+                <button style="background:white; margin-left: 10px; margin-right:20px;" (click)="openCard()">Add Place</button>
                 <add-card #myCards></add-card>
             </div>
             <div #generateDiv>
